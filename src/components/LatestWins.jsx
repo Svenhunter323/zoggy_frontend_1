@@ -212,7 +212,7 @@ const LatestWins = () => {
             </thead>
             <tbody className="divide-y divide-gray-700">
               <AnimatePresence>
-                {wins.slice(0, 24).filter(win => 
+                {wins.slice(0, 4).filter(win => 
                   win && 
                   win.username && 
                   // win.country && 
@@ -249,13 +249,13 @@ const LatestWins = () => {
                               win.amount > 500 ? 'text-green-400' : 'text-gray-400'
                             }`} />
                           </div>
-                          <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-800 animate-pulse"></div>
+                          {/* <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-800 animate-pulse"></div> */}
                         </div>
                         <div>
                           <p className="font-semibold text-white text-base font-poppins">
                             {win.username}
                           </p>
-                          <p className="text-xs text-gray-400 font-montserrat">Online</p>
+                          {/* <p className="text-xs text-gray-400 font-montserrat">Online</p> */}
                         </div>
                       </div>
                     </td>
@@ -295,11 +295,11 @@ const LatestWins = () => {
                     </td> */}
                     <td className="px-8 py-6 whitespace-nowrap">
                       <div className="flex items-center space-x-2">
-                        <DollarSign className={`w-5 h-5 ${
+                        {/* <DollarSign className={`w-5 h-5 ${
                           win.amount > 5000 ? 'text-purple-400' :
                           win.amount > 1000 ? 'text-gold' :
                           win.amount > 500 ? 'text-green-400' : 'text-green-400'
-                        }`} />
+                        }`} /> */}
                         <span className={`font-bold font-poppins ${
                           win.amount > 5000 ? 'text-purple-400 text-xl animate-glow' :
                           win.amount > 1000 ? 'text-gold text-xl animate-glow' :

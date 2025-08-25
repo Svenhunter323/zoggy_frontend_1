@@ -15,7 +15,8 @@ const LandingPage = () => {
   }, [])
 
   const handleJoinWaitlist = () => {
-    navigate('/signup')
+    // navigate('/signup')
+    navigate('/signin')
   }
 
   return (

@@ -8,6 +8,37 @@ import Card from './Card'
 const Leaderboard = () => {
   const { data: leaderboard, loading } = useApi(dataAPI.getLeaderboard)
 
+  // Fake users data to supplement leaderboard
+  const fakeUsers = [
+    { id: 'fake-1', email: 'ch***@gmail.com', referrals: 178 },
+    { id: 'fake-2', email: 'al***@yahoo.com', referrals: 153 },
+    { id: 'fake-3', email: 'mi***@hotmail.com', referrals: 112 },
+    { id: 'fake-4', email: 'sa***@gmail.com', referrals: 78 },
+    { id: 'fake-5', email: 'da***@outlook.com', referrals: 73 },
+    { id: 'fake-6', email: 'ja***@gmail.com', referrals: 65 },
+    { id: 'fake-7', email: 'em***@yahoo.com', referrals: 45 },
+    { id: 'fake-8', email: 'ro***@gmail.com', referrals: 29 },
+    { id: 'fake-9', email: 'li***@hotmail.com', referrals: 19 },
+    { id: 'fake-10', email: 'br***@gmail.com', referrals: 14 }
+  ]
+
+  // Combine real and fake data, ensuring we have exactly 10 users
+  const getLeaderboardData = () => {
+    const realData = leaderboard || []
+    const combinedData = [...realData]
+    
+    // Add fake users to fill up to 10 total
+    const needed = Math.max(0, 10 - realData.length)
+    if (needed > 0) {
+      combinedData.push(...fakeUsers.slice(0, needed))
+    }
+    
+    // Sort by referrals in descending order and take top 10
+    return combinedData
+      .sort((a, b) => b.referrals - a.referrals)
+      .slice(0, 10)
+  }
+
   const getRankIcon = (rank) => {
     switch (rank) {
       case 1:
@@ -17,7 +48,8 @@ const Leaderboard = () => {
       case 3:
         return <Medal className="w-6 h-6 text-yellow-600" />
       default:
-        return <span className="w-6 h-6 flex items-center justify-center text-gray-400 font-bold">{rank}</span>
+        // return <span className="w-6 h-6 flex items-center justify-center text-gray-400 font-bold">{rank}</span>
+        return <span className="w-6 h-6 flex items-center justify-center text-gray-400 font-bold"></span>
     }
   }
 
@@ -96,14 +128,15 @@ const Leaderboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {(leaderboard || []).map((user, index) => {
+                {getLeaderboardData().map((user, index) => {
                   const rank = index + 1
-                  const isQualified = user.referrals >= 10
+                  // const isQualified = user.referrals >= 10
+                  const isQualified = user.referrals >= 1
                   
                   return (
                     <tr
                       key={user.id || `user-${index}`}
-                      className={`border-b border-gray-700/50 ${
+                      className={`border-b border-gray-700/50 hover:bg-gray-800/50 ${
                         rank <= 3 
                           ? 'bg-gradient-to-r from-gold/10 to-yellow-600/10' 
                           : 'hover:bg-gray-800/50'
@@ -147,9 +180,9 @@ const Leaderboard = () => {
                           }`}>
                             {formatCurrency(getPrize(rank))}
                           </p>
-                          {rank <= 3 && isQualified && (
+                          {/* {rank <= 3 && isQualified && (
                             <p className="text-xs text-gold">Prize Winner!</p>
-                          )}
+                          )} */}
                         </div>
                       </td>
                     </tr>

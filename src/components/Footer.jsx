@@ -6,19 +6,19 @@ const Footer = () => {
     <footer className="bg-gray-900 text-white py-12 px-6">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-3 mb-4">
+          {/* <div className="flex items-center justify-center space-x-3 mb-4">
             <img 
               src="/logo.svg" 
               alt="Zoggy Logo" 
               className="w-10 h-10 filter brightness-0 invert"
             />
             <span className="text-2xl font-bold">Zoggy</span>
-          </div>
+          </div> */}
           <p className="text-gray-400 text-lg">
             Get early access and unlock daily rewards
           </p>
         </div>
-
+{/* 
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div className="text-center">
             <div className="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -71,7 +71,7 @@ const Footer = () => {
           <p className="text-gray-500 text-sm mt-2">
             Join the waitlist and be among the first to experience daily rewards.
           </p>
-        </div>
+        </div> */}
       </div>
     </footer>
   )

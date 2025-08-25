@@ -10,6 +10,7 @@ import Countdown from './Countdown'
 import CaseOpenModal from './CaseOpenModal'
 import TelegramModal from './TelegramModal'
 import { useToast } from '../contexts/ToastContext'
+import chestImage from '../assets/chest.png'
 
 const DailyChest = ({ dashboardData }) => {
   const { user, fetchUser } = useAuth()
@@ -69,13 +70,17 @@ const DailyChest = ({ dashboardData }) => {
               repeat: canOpen ? Infinity : 0,
               ease: "easeInOut"
             }}
-            className={`w-full h-full bg-gradient-to-br from-gold via-yellow-400 to-yellow-600 rounded-3xl shadow-2xl flex items-center justify-center transform hover:scale-110 transition-all duration-500 ${
-              !canOpen ? 'opacity-60 grayscale' : 'shadow-gold/50'
+            className={`w-full h-full flex items-center justify-center transform hover:scale-110 transition-all duration-500 ${
+              !canOpen ? 'opacity-60 grayscale' : ''
             }`}
           >
-            <Gift className="w-20 h-20 text-gray-900 drop-shadow-2xl" />
+            <img 
+              src={chestImage} 
+              alt="Daily Chest" 
+              className="w-48 h-48 object-contain drop-shadow-2xl"
+            />
             {!canOpen && (
-              <div className="absolute inset-0 bg-gray-900 bg-opacity-50 rounded-2xl flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center justify-center">
                 <Lock className="w-8 h-8 text-white" />
                 <Lock className="w-8 h-8 text-white" />
               </div>

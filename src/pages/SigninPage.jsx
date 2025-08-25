@@ -44,13 +44,13 @@ const SigninPage = () => {
     
     try {
       const response = await authAPI.signin(email)
-      const { token, user } = response.data
+      const { token, user, redirect } = response.data
       
       setToken(token)
       setUser(user)
       
       showToast('Successfully signed in!', 'success')
-      navigate('/dashboard')
+      navigate(redirect)
     } catch (error) {
       console.error('Signin failed:', error)
       if (error.response?.status === 404) {
