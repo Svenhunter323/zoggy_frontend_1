@@ -14,10 +14,6 @@ import { motion } from 'framer-motion'
 import Button from '../components/Button'
 import { userAPI } from '../api/endpoints'
 import { useToast } from '../contexts/ToastContext'
-import banner0 from '../assets/banerrs/0.png'
-import banner1 from '../assets/banerrs/1.png'
-import banner2 from '../assets/banerrs/2.png'
-import banner3 from '../assets/banerrs/3.jpg'
 
 const DashboardPage = () => {
   const { user, fetchUser } = useAuth()
@@ -27,7 +23,6 @@ const DashboardPage = () => {
   const [showCaseModal, setShowCaseModal] = useState(false)
   const [showTelegramModal, setShowTelegramModal] = useState(false)
   const [reward, setReward] = useState(null)
-  const bannerImages = [banner0, banner1, banner2, banner3]
   const channelHandle = import.meta.env.VITE_TG_CHANNEL_HANDLE || '@zoggytestchannel'
 
   const handleOpenChest = (rewardData) => {
@@ -98,16 +93,15 @@ const DashboardPage = () => {
       <Header minimal={false} title="" />
 
       {/* Hero Banner Carousel Section */}
-      <div className="h-64 md:h-80 lg:h-96 relative overflow-hidden">
+      <div className="md:h-96 lg:h-[28rem] relative overflow-hidden">
         <Carousel
-          images={bannerImages}
           autoSlide={true}
           slideInterval={6000}
-          className="w-full h-full"
+          // className="w-full h-full"
         />
 
         {/* Overlay Text */}
-        <div className="absolute inset-0 flex items-center justify-center z-40">
+        {/* <div className="absolute inset-0 flex items-center justify-center z-40">
           <div className="text-center px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -127,7 +121,7 @@ const DashboardPage = () => {
               </p>
             </motion.div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-12">

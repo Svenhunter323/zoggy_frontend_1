@@ -5,14 +5,9 @@ import Button from './Button'
 import { useAuth } from '../contexts/AuthContext'
 import Carousel from './Carousel'
 import EnhancedEmailSignup from './EnhancedEmailSignup'
-import banner0 from '../assets/banerrs/0.png'
-import banner1 from '../assets/banerrs/1.png'
-import banner2 from '../assets/banerrs/2.png'
-import banner3 from '../assets/banerrs/3.jpg'
 
 const HeroSection = ({ onJoinWaitlist }) => {
   const { user } = useAuth();
-  const bannerImages = [banner0, banner1, banner2, banner3];
   const [hasReferralCode, setHasReferralCode] = useState(false);
 
   // Check for referral code in URL
@@ -21,24 +16,20 @@ const HeroSection = ({ onJoinWaitlist }) => {
     const refCode = urlParams.get('ref');
     setHasReferralCode(!!refCode);
   }, []);
-  
-  // Debug: Log image paths
-  console.log('Banner images:', bannerImages);
 
 
   return (
     <section className={`${user ? 'min-h-fit' : 'min-h-screen'} bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950`}>
       {/* Banner Carousel Section */}
-      <div className="h-64 md:h-80 lg:h-96 relative overflow-hidden">
+      <div className="md:h-96 lg:h-[28rem] relative overflow-hidden">
         <Carousel 
-          images={bannerImages}
           autoSlide={true}
           slideInterval={6000}
           className="w-full h-full"
         />
         
         {/* Overlay Text */}
-        <div className="absolute inset-0 flex items-center justify-center z-40">
+        {/* <div className="absolute inset-0 flex items-center justify-center z-40">
           <div className="text-center px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -58,7 +49,7 @@ const HeroSection = ({ onJoinWaitlist }) => {
               </p>
             </motion.div>
           </div>
-        </div>
+        </div> */}
       </div>
       
       {/* Hero Text Content */}

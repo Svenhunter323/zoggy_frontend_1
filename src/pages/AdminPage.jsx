@@ -36,6 +36,25 @@ const AdminPage = () => {
     }
   }
 
+  const handleExportReferralsCSV = async () => {
+    try {
+      const response = await adminAPI.exportReferrals()
+      const blob = new Blob([response.data], { type: 'text/csv' })
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = 'referrals.csv'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+      showToast('Referrals CSV exported successfully!', 'success')
+    } catch (error) {
+      console.error('Failed to export referrals CSV:', error)
+      showToast('Failed to export referrals CSV', 'error')
+    }
+  }
+
   const maskEmail = (email) => {
     if (showEmails) return email
     const [local, domain] = email.split('@')
@@ -76,22 +95,33 @@ const AdminPage = () => {
               {showEmails ? 'Hide' : 'Show'} Emails
             </Button>
             
-            <Button
+            {/* <Button
               variant="secondary"
               onClick={handleExportCSV}
             >
               <Download className="w-4 h-4 mr-2" />
               Export CSV
-            </Button>
+            </Button> */}
           </div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Users Table */}
           <Card>
-            <div className="flex items-center space-x-3 mb-6">
-              <Users className="w-6 h-6 text-brand" />
-              <h2 className="text-2xl font-bold text-white">Users</h2>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-3">
+                <Users className="w-6 h-6 text-brand" />
+                <h2 className="text-2xl font-bold text-white">Users</h2>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExportCSV}
+                className="border-brand text-brand hover:bg-brand hover:text-black"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export CSV
+              </Button>
             </div>
             
             <ResponsiveTable
@@ -121,7 +151,7 @@ const AdminPage = () => {
                   accessor: 'credits',
                   render: (value, item) => (
                     <span className="text-green-400 font-semibold">
-                      {formatCurrency((item.credits + item.cents) || 0)}
+                      {formatCurrency(((item.credits + item.cents)/100).toFixed(2) || 0)}
                     </span>
                   )
                 }
@@ -132,9 +162,20 @@ const AdminPage = () => {
 
           {/* Referrals Table */}
           <Card>
-            <div className="flex items-center space-x-3 mb-6">
-              <UserPlus className="w-6 h-6 text-gold" />
-              <h2 className="text-2xl font-bold text-white">Referrals</h2>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-3">
+                <UserPlus className="w-6 h-6 text-gold" />
+                <h2 className="text-2xl font-bold text-white">Referrals</h2>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExportReferralsCSV}
+                className="border-gold text-gold hover:bg-gold hover:text-black"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export CSV
+              </Button>
             </div>
             
             <ResponsiveTable
@@ -142,7 +183,7 @@ const AdminPage = () => {
               loading={referralsLoading}
               columns={[
                 {
-                  header: 'Referrer',
+                  header: 'Referrer Email',
                   accessor: 'referrerEmail',
                   render: (value) => (
                     <span className="text-white font-mono text-sm break-all">
@@ -151,18 +192,31 @@ const AdminPage = () => {
                   )
                 },
                 {
-                  header: 'Referred',
-                  accessor: 'referredEmail',
+                  header: 'Referral Code',
+                  accessor: 'referralCode',
                   render: (value) => (
-                    <span className="text-white font-mono text-sm break-all">
-                      {maskEmail(value)}
+                    <span className="text-gold font-mono text-sm font-semibold">
+                      {value}
                     </span>
                   )
                 },
                 {
-                  header: 'Status',
-                  accessor: 'status',
-                  render: (value) => getStatusChip(value)
+                  header: 'Total Referrals',
+                  accessor: 'totalReferrals',
+                  render: (value) => (
+                    <span className="text-white text-sm font-semibold">
+                      {value}
+                    </span>
+                  )
+                },
+                {
+                  header: 'Credits Earned',
+                  accessor: 'referrerCredits',
+                  render: (value) => (
+                    <span className="text-green-400 text-sm font-semibold">
+                      ${value}
+                    </span>
+                  )
                 }
               ]}
               emptyMessage="No referrals found"

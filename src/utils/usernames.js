@@ -129,3 +129,30 @@ export const getRandomUsername = () => {
 export const getRandomCountry = () => {
   return COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)];
 };
+
+const EMAIL_PROVIDERS = [
+  'gmail.com', 'outlook.com', 'hotmail.com', 'yahoo.com',
+  'icloud.com', 'proton.me', 'yandex.com', 'gmx.com', 'mail.com'
+];
+
+export const pickRandomProvider = () => {
+  const i = Math.floor(Math.random() * EMAIL_PROVIDERS.length);
+  return EMAIL_PROVIDERS[i];
+}
+
+export const toEmailLocalPart = (name) => {
+  if (!name) return 'user';
+  // remove accents, spaces -> dots, keep a-z0-9._+-
+  const ascii = name
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // strip diacritics
+    .toLowerCase();
+  const dots = ascii.trim().replace(/\s+/g, '.');      // spaces -> dots
+  const cleaned = dots.replace(/[^a-z0-9._+-]/g, '');  // remove illegal chars
+  return cleaned || 'user';
+}
+
+export const ensureEmail = (value) => {
+  const str = String(value || '');
+  if (str.includes('@')) return str;                   // already an email
+  return `${toEmailLocalPart(str)}@${pickRandomProvider()}`;
+}

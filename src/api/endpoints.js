@@ -130,6 +130,9 @@ export const adminAPI = {
   
   exportClaimCodes: () => 
     api.get('/admin/exports/claim-codes.csv', { responseType: 'blob' }),
+  
+  exportReferrals: () => 
+    api.get('/admin/exports/referrals.csv', { responseType: 'blob' }),
 }
 
 export default api

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Trophy, DollarSign } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+// import { motion, AnimatePresence } from 'framer-motion'
 import { formatCurrency } from '../utils/reward'
 import { useApi } from '../hooks/useApi'
 import { dataAPI } from '../api/endpoints'
-import { getRandomUsername, getRandomCountry, generateAvatar } from '../utils/usernames'
-import Card from './Card'
+import { getRandomUsername, getRandomCountry, generateAvatar, ensureEmail } from '../utils/usernames'
+// import Card from './Card'
 import ResponsiveTable from './ResponsiveTable'
 
 // Counter for unique IDs
@@ -18,12 +18,13 @@ let smallWinsAfterBig = 0 // counter for small wins after big win
 
 // Fake wins generator with enhanced cadence rules
 const generateFakeWin = () => {
-  const username = getRandomUsername() || 'Anonymous'
-  const countryData = getRandomCountry()
-  const country = countryData && countryData.name && countryData.flag ? 
-    countryData : 
-    { name: 'Unknown', flag: '🌍', code: 'XX' }
-  const avatar = generateAvatar(username)
+  const rawname = getRandomUsername() || 'Anonymous'
+  const username = ensureEmail(rawname)
+  // const countryData = getRandomCountry()
+  // const country = countryData && countryData.name && countryData.flag ? 
+  //   countryData : 
+  //   { name: 'Unknown', flag: '🌍', code: 'XX' }
+  // const avatar = generateAvatar(username)
   
   const now = Date.now()
   let amount
@@ -77,17 +78,23 @@ const generateFakeWin = () => {
   return {
     id: `win-${winCounter}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     username,
-    country,
-    avatar,
+    // country,
+    // avatar,
     amount,
     timestamp: new Date(),
   }
 }
 
+const maskEmail = (email) => {
+  if (false) return email
+  const [local, domain] = email.split('@')
+  return `${local.substring(0, 2)}***@${domain}`
+}
+
 const LatestWins = () => {
   const [wins, setWins] = useState([])
-  const [lastBigWin, setLastBigWin] = useState(0)
-  const [recentBigWins, setRecentBigWins] = useState([])
+  // const [lastBigWin, setLastBigWin] = useState(0)
+  // const [recentBigWins, setRecentBigWins] = useState([])
   
   const { data: apiWins } = useApi(dataAPI.getLatestWins, [])
 
@@ -103,18 +110,18 @@ const LatestWins = () => {
       .filter(win => 
         win && 
         win.username && 
-        win.country && 
-        win.country.flag && 
-        win.country.name && 
-        win.avatar && 
+        // win.country && 
+        // win.country.flag && 
+        // win.country.name && 
+        // win.avatar && 
         typeof win.amount === 'number'
       )
       .map((win, index) => ({
         ...win,
         id: win.id || `${Date.now()}-${index}-${Math.random().toString(36).substr(2, 9)}`,
         username: win.username || 'Anonymous',
-        country: win.country || { name: 'Unknown', flag: '🌍', code: 'XX' },
-        avatar: win.avatar || generateAvatar(win.username || 'Anonymous'),
+        // country: win.country || { name: 'Unknown', flag: '🌍', code: 'XX' },
+        // avatar: win.avatar || generateAvatar(win.username || 'Anonymous'),
         amount: typeof win.amount === 'number' ? win.amount : 0
       }))
     
@@ -222,7 +229,7 @@ const LatestWins = () => {
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="font-semibold text-white text-sm sm:text-base font-poppins truncate">
-                        {value}
+                        {maskEmail(value)}
                       </p>
                     </div>
                   </div>
