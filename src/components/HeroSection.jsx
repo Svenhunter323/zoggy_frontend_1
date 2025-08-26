@@ -4,6 +4,7 @@ import { Gift } from 'lucide-react'
 import Button from './Button'
 import { useAuth } from '../contexts/AuthContext'
 import Carousel from './Carousel'
+import EnhancedEmailSignup from './EnhancedEmailSignup'
 import banner0 from '../assets/banerrs/0.png'
 import banner1 from '../assets/banerrs/1.png'
 import banner2 from '../assets/banerrs/2.png'
@@ -100,22 +101,13 @@ const HeroSection = ({ onJoinWaitlist }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
         >
-          {!user && true && (
-            <div className="space-y-6 flex flex-col items-center justify-center">
-              <Button
-                variant="primary"
-                size="lg"
-                style={{ backgroundColor: '#591a11', borderColor: '#591a11' }}
-                onClick={onJoinWaitlist}
-                className="text-2xl px-16 py-8 shadow-2xl hover:shadow-brand/50 transform hover:scale-105 transition-all duration-300"
-              >
-                <Gift className="w-6 h-6 mr-3" />
-                Join Waitlist
-              </Button>
-              <p className="text-sm text-gray-400 font-montserrat">
-                🎁 <span className="text-gold">Free to join</span> • No credit card required • Instant access
-              </p>
-            </div>
+          {!user && (
+            <EnhancedEmailSignup 
+              onSuccess={(data) => {
+                console.log('Signup successful:', data)
+                // User will be automatically redirected to dashboard
+              }}
+            />
           )}
         </motion.div>
         </div>

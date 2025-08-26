@@ -6,6 +6,7 @@ import { useApi } from '../hooks/useApi'
 import { dataAPI } from '../api/endpoints'
 import { getRandomUsername, getRandomCountry, generateAvatar } from '../utils/usernames'
 import Card from './Card'
+import ResponsiveTable from './ResponsiveTable'
 
 // Counter for unique IDs
 let winCounter = 0
@@ -192,129 +193,76 @@ const LatestWins = () => {
           </div>
         </div>
 
-        <div className="w-4/5 overflow-x-auto shadow-2xl rounded-2xl mx-auto">
-          <table className="w-full bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700/50">
-            <thead className="bg-gradient-to-r from-gray-700 to-gray-800 border-b border-gray-600">
-              <tr>
-                <th className="px-8 py-6 text-left text-sm font-bold text-gold uppercase tracking-widest font-montserrat">
-                  {/* Player */}
-                </th>
-                <th className="px-8 py-6 text-left text-sm font-bold text-gold uppercase tracking-widest font-montserrat">
-                  {/* Country */}
-                </th>
-                {/* <th className="px-8 py-6 text-left text-sm font-bold text-gold uppercase tracking-widest font-montserrat">
-                  Game
-                </th> */}
-                <th className="px-8 py-6 text-left text-sm font-bold text-gold uppercase tracking-widest font-montserrat">
-                  {/* Win Amount */}
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-700">
-              <AnimatePresence>
-                {wins.slice(0, 4).filter(win => 
-                  win && 
-                  win.username && 
-                  // win.country && 
-                  // win.country.flag && 
-                  // win.country.name && 
-                  // win.avatar && 
-                  typeof win.amount === 'number'
-                ).map((win, index) => (
-                  <motion.tr
-                    key={win.id || `fallback-${index}-${Date.now()}`}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ duration: 0.3, delay: index * 0.02 }}
-                    className={`transition-all duration-300 ${
-                      index === 0 ? 'bg-gradient-to-r from-gold/20 to-transparent border-l-4 border-gold animate-pulse' : 'hover:bg-gray-700/50'
-                    } ${
-                      win.amount > 5000 ? 'bg-gradient-to-r from-purple-500/20 via-purple-400/10 to-transparent border-l-2 border-purple-400' :
-                      win.amount > 1000 ? 'bg-gradient-to-r from-gold/20 via-gold/10 to-transparent border-l-2 border-gold' :
-                      win.amount > 500 ? 'bg-gradient-to-r from-green-500/20 via-green-400/10 to-transparent border-l-2 border-green-400' : 'hover:border-l-2 hover:border-gray-600'
-                    }`}
-                  >
-                    <td className="px-8 py-6 whitespace-nowrap">
-                      <div className="flex items-center space-x-4">
-                        <div className="relative">
-                          <div className={`w-12 h-12 rounded-full border-2 shadow-lg transition-transform hover:scale-110 flex items-center justify-center ${
-                            win.amount > 5000 ? 'bg-purple-500/20 border-purple-400' :
-                            win.amount > 1000 ? 'bg-gold/20 border-gold' :
-                            win.amount > 500 ? 'bg-green-500/20 border-green-400' : 'bg-gray-600/20 border-gray-600'
-                          }`}>
-                            <Trophy className={`w-6 h-6 ${
-                              win.amount > 5000 ? 'text-purple-400' :
-                              win.amount > 1000 ? 'text-gold' :
-                              win.amount > 500 ? 'text-green-400' : 'text-gray-400'
-                            }`} />
-                          </div>
-                          {/* <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-800 animate-pulse"></div> */}
-                        </div>
-                        <div>
-                          <p className="font-semibold text-white text-base font-poppins">
-                            {win.username}
-                          </p>
-                          {/* <p className="text-xs text-gray-400 font-montserrat">Online</p> */}
-                        </div>
+        <div className="w-full max-w-4xl mx-auto shadow-2xl rounded-2xl">
+          <ResponsiveTable
+            data={wins.slice(0, 4).filter(win => 
+              win && 
+              win.username && 
+              typeof win.amount === 'number'
+            )}
+            animated={true}
+            columns={[
+              {
+                header: 'Player',
+                accessor: 'username',
+                render: (value, item) => (
+                  <div className="flex items-center space-x-2 sm:space-x-4">
+                    <div className="relative">
+                      <div className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full border-2 shadow-lg transition-transform hover:scale-110 flex items-center justify-center ${
+                        item.amount > 5000 ? 'bg-purple-500/20 border-purple-400' :
+                        item.amount > 1000 ? 'bg-gold/20 border-gold' :
+                        item.amount > 500 ? 'bg-green-500/20 border-green-400' : 'bg-gray-600/20 border-gray-600'
+                      }`}>
+                        <Trophy className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 ${
+                          item.amount > 5000 ? 'text-purple-400' :
+                          item.amount > 1000 ? 'text-gold' :
+                          item.amount > 500 ? 'text-green-400' : 'text-gray-400'
+                        }`} />
                       </div>
-                    </td>
-                    <td className="px-8 py-6 whitespace-nowrap">
-                      <div className="flex items-center space-x-3">
-                        <div className="relative">
-                          {/* <img 
-                            src={`https://flagcdn.com/w20/${win.country.code.toLowerCase()}.png`}
-                            alt={`${win.country.name} flag`}
-                            className="w-6 h-5 rounded-sm border border-gray-600 shadow-sm transition-transform hover:scale-110"
-                            onError={(e) => {
-                              e.target.style.display = 'none'
-                              e.target.nextSibling.style.display = 'inline'
-                            }}
-                          />
-                          <span className="text-lg hidden">{win.country.flag}</span> */}
-                        </div>
-                        {/* <span className="text-base text-gray-200 font-montserrat">{win.country.name}</span> */}
-                        <span className="text-base text-gray-200 font-montserrat">&emsp;Just&nbsp;&nbsp;&nbsp;&nbsp;hit&nbsp;&emsp;</span>
-                      </div>
-                    </td>
-                    {/* <td className="px-8 py-6 whitespace-nowrap">
-                      <div className="flex items-center space-x-3">
-                        <div className={`p-2 rounded-full ${
-                          win.amount > 10000 ? 'bg-purple-500/20' :
-                          win.amount > 2000 ? 'bg-gold/20' :
-                          win.amount > 1000 ? 'bg-green-500/20' : 'bg-gray-600/20'
-                        }`}>
-                          <Trophy className={`w-5 h-5 ${
-                            win.amount > 10000 ? 'text-purple-400' :
-                            win.amount > 2000 ? 'text-gold' :
-                            win.amount > 1000 ? 'text-green-400' : 'text-gray-400'
-                          }`} />
-                        </div>
-                        <span className="text-base text-gray-200 font-montserrat">Lottery</span>
-                      </div>
-                    </td> */}
-                    <td className="px-8 py-6 whitespace-nowrap">
-                      <div className="flex items-center space-x-2">
-                        {/* <DollarSign className={`w-5 h-5 ${
-                          win.amount > 5000 ? 'text-purple-400' :
-                          win.amount > 1000 ? 'text-gold' :
-                          win.amount > 500 ? 'text-green-400' : 'text-green-400'
-                        }`} /> */}
-                        <span className={`font-bold font-poppins ${
-                          win.amount > 5000 ? 'text-purple-400 text-xl animate-glow' :
-                          win.amount > 1000 ? 'text-gold text-xl animate-glow' :
-                          win.amount > 500 ? 'text-green-400 text-lg' : 'text-green-400 text-base'
-                        }`}>
-                          {formatCurrency(win.amount)}
-                        </span>
-                      </div>
-                    </td>
-                  </motion.tr>
-                ))}
-              </AnimatePresence>
-            </tbody>
-          </table>
-
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-semibold text-white text-sm sm:text-base font-poppins truncate">
+                        {value}
+                      </p>
+                    </div>
+                  </div>
+                )
+              },
+              {
+                header: 'Action',
+                accessor: 'action',
+                render: () => (
+                  <span className="text-sm sm:text-base text-gray-200 font-montserrat">Just hit</span>
+                )
+              },
+              {
+                header: 'Amount',
+                accessor: 'amount',
+                render: (value) => (
+                  <span className={`font-bold font-poppins ${
+                    value > 5000 ? 'text-purple-400 text-lg sm:text-xl animate-glow' :
+                    value > 1000 ? 'text-gold text-lg sm:text-xl animate-glow' :
+                    value > 500 ? 'text-green-400 text-base sm:text-lg' : 'text-green-400 text-sm sm:text-base'
+                  }`}>
+                    {formatCurrency(value)}
+                  </span>
+                ),
+                headerClassName: 'text-right',
+                cellClassName: 'text-right'
+              }
+            ]}
+            desktopTableClassName="w-full min-w-[600px] bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700/50"
+            mobileCardClassName={(item, index) => {
+              const baseClasses = 'transition-all duration-300'
+              const highlightClasses = index === 0 ? 'bg-gradient-to-r from-gold/20 to-transparent border-l-4 border-gold animate-pulse' : ''
+              const amountClasses = 
+                item.amount > 5000 ? 'bg-gradient-to-r from-purple-500/20 via-purple-400/10 to-transparent border-l-2 border-purple-400' :
+                item.amount > 1000 ? 'bg-gradient-to-r from-gold/20 via-gold/10 to-transparent border-l-2 border-gold' :
+                item.amount > 500 ? 'bg-gradient-to-r from-green-500/20 via-green-400/10 to-transparent border-l-2 border-green-400' : ''
+              return `${baseClasses} ${highlightClasses} ${amountClasses}`
+            }}
+            emptyMessage="No recent wins"
+          />
         </div>
       </div>
     </section>

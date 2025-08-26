@@ -48,9 +48,13 @@ api.interceptors.response.use(
 
 // Auth endpoints
 export const authAPI = {
-  signup: (email, referralCode = null) => 
-    // api.post('/waitlist', { email, referralCode }),
-    api.post('/auth/signup', { email, referralCode }),
+  signup: (email, referralCode = null, deviceFingerprint = null) => 
+    api.post('/auth/signup', { 
+      email, 
+      referralCode,
+      deviceFingerprint,
+      timestamp: Date.now()
+    }),
   
   signin: (email) => 
     api.post('/auth/signin', { email }),
@@ -60,6 +64,9 @@ export const authAPI = {
   
   resendVerification: (email) => 
     api.post('/auth/resend', { email }),
+  
+  checkEmailExists: (email) =>
+    api.post('/auth/check-email', { email }),
 }
 
 // User endpoints

@@ -21,7 +21,7 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-      <Header minimal={true} title="JOIN WAITLIST" />
+      <Header minimal={true} title="" />
       <HeroSection onJoinWaitlist={handleJoinWaitlist} />
       {/* <StatsSection /> */}
       <LatestWins />

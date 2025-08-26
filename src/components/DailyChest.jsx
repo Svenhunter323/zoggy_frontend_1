@@ -45,7 +45,6 @@ const DailyChest = ({ dashboardData }) => {
       })
       
       setShowCaseModal(true)
-      await fetchUser() // Refresh user data
     } catch (error) {
       console.error('Failed to open chest:', error)
       showToast('Failed to open chest. Please try again.', 'error')
@@ -63,26 +62,82 @@ const DailyChest = ({ dashboardData }) => {
           <motion.div
             animate={canOpen ? { 
               rotateY: [0, 10, -10, 0],
-              scale: [1, 1.05, 1]
+              scale: [1, 1.05, 1],
+              y: [0, -5, 0]
             } : {}}
             transition={{ 
               duration: 2,
               repeat: canOpen ? Infinity : 0,
               ease: "easeInOut"
             }}
-            className={`w-full h-full flex items-center justify-center transform hover:scale-110 transition-all duration-500 ${
+            className={`w-full h-full flex items-center justify-center transform hover:scale-110 transition-all duration-500 relative ${
               !canOpen ? 'opacity-60 grayscale' : ''
             }`}
           >
-            <img 
+            {/* Glow effect for available chest */}
+            {canOpen && (
+              <motion.div
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.6, 0.3]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="absolute inset-0 bg-gold/20 rounded-full blur-xl"
+              />
+            )}
+            
+            <motion.img 
               src={chestImage} 
               alt="Daily Chest" 
-              className="w-48 h-48 object-contain drop-shadow-2xl"
+              className="w-48 h-48 object-contain drop-shadow-2xl relative z-10"
+              animate={isOpening ? {
+                rotateY: [0, 180, 360],
+                scale: [1, 1.2, 1.1],
+                y: [0, -20, -10]
+              } : {}}
+              transition={{
+                duration: 1.5,
+                ease: "easeInOut"
+              }}
             />
+            
+            {/* Opening sparkles */}
+            {isOpening && (
+              <>
+                {[...Array(8)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{
+                      opacity: [0, 1, 0],
+                      scale: [0, 1, 0],
+                      x: [0, (Math.cos(i * 45 * Math.PI / 180) * 60)],
+                      y: [0, (Math.sin(i * 45 * Math.PI / 180) * 60)]
+                    }}
+                    transition={{
+                      duration: 1,
+                      delay: 0.5 + i * 0.1,
+                      ease: "easeOut"
+                    }}
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-gold rounded-full"
+                  />
+                ))}
+              </>
+            )}
+            
             {!canOpen && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Lock className="w-8 h-8 text-white" />
-                <Lock className="w-8 h-8 text-white" />
+              <div className="absolute inset-0 flex items-center justify-center z-20">
+                <motion.div
+                  animate={{ rotate: [0, 5, -5, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="bg-gray-800/80 rounded-full p-3 backdrop-blur-sm"
+                >
+                  <Lock className="w-8 h-8 text-white" />
+                </motion.div>
               </div>
             )}
           </motion.div>
@@ -121,9 +176,10 @@ const DailyChest = ({ dashboardData }) => {
 
       <CaseOpenModal
         isOpen={showCaseModal}
-        onClose={() => {
+        onClose={async () => {
           setShowCaseModal(false)
           setReward(null)
+          await fetchUser() // Refresh user data
         }}
         reward={reward}
       />

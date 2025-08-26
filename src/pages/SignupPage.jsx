@@ -6,18 +6,19 @@ import { validateEmail } from '../utils/userUtils'
 import Header from '../components/Header'
 import Button from '../components/Button'
 import Card from '../components/Card'
-import { useToast
-  
- } from '../contexts/ToastContext'
+import { useToast } from '../contexts/ToastContext'
+import { useAuth } from '../contexts/AuthContext'
 const SignupPage = () => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const { showToast, ToastContainer } = useToast()
+  const { showToast } = useToast()
+  const { setToken, setUser } = useAuth()
   
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [referralCode, setReferralCode] = useState('')
+  const [emailValid, setEmailValid] = useState(null)
 
   useEffect(() => {
     const refCode = searchParams.get('ref')
@@ -25,6 +26,24 @@ const SignupPage = () => {
       setReferralCode(refCode)
     }
   }, [searchParams])
+
+  // Real-time email validation
+  const handleEmailChange = (e) => {
+    const value = e.target.value
+    setEmail(value)
+    setEmailError('')
+    
+    if (value) {
+      if (validateEmail(value)) {
+        setEmailValid(true)
+      } else {
+        setEmailValid(false)
+        setEmailError('Please enter a valid email address')
+      }
+    } else {
+      setEmailValid(null)
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -43,11 +62,23 @@ const SignupPage = () => {
     setIsLoading(true)
     
     try {
-      await authAPI.signup(email, referralCode || null)
-      showToast('Successfully joined the waitlist!', 'success')
-      setTimeout(() => {
+      const signupResponse = await authAPI.signup(email, referralCode || null)
+      
+      // Instant auto-login after successful signup
+      try {
+        const signinResponse = await authAPI.signin(email)
+        const { token, user } = signinResponse.data
+        
+        setToken(token)
+        setUser(user)
+        
+        showToast('Welcome! You\'ve been automatically logged in.', 'success')
+        navigate('/dashboard')
+      } catch (signinError) {
+        // Fallback to manual signin if auto-login fails
+        showToast('Successfully joined! Please sign in to continue.', 'success')
         navigate('/signin', { state: { email } })
-      }, 1500)
+      }
     } catch (error) {
       console.error('Signup failed:', error)
       if (error.response?.status === 409) {
@@ -95,9 +126,11 @@ const SignupPage = () => {
                     type="email"
                     placeholder="Enter your email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className={`w-full pl-10 pr-4 py-3 bg-gray-700 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand transition-all ${
-                      emailError ? 'border-red-500 ring-red-500' : 'border-gray-600'
+                    onChange={handleEmailChange}
+                    className={`w-full pl-10 pr-4 py-3 bg-gray-700 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 transition-all ${
+                      emailError ? 'border-red-500 ring-red-500 focus:ring-red-500' : 
+                      emailValid === true ? 'border-green-500 ring-green-500 focus:ring-green-500' :
+                      'border-gray-600 focus:ring-brand'
                     }`}
                     required
                   />

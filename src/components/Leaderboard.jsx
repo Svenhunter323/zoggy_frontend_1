@@ -4,6 +4,7 @@ import { useApi } from '../hooks/useApi'
 import { dataAPI } from '../api/endpoints'
 import { formatCurrency } from '../utils/reward'
 import Card from './Card'
+import ResponsiveTable from './ResponsiveTable'
 
 const Leaderboard = () => {
   const { data: leaderboard, loading } = useApi(dataAPI.getLeaderboard)
@@ -109,88 +110,90 @@ const Leaderboard = () => {
         </div>
 
         <Card>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-700">
-                  <th className="text-left py-4 px-4 text-sm font-bold text-gold uppercase tracking-wider">
-                    Rank
-                  </th>
-                  <th className="text-left py-4 px-4 text-sm font-bold text-gold uppercase tracking-wider">
-                    Player
-                  </th>
-                  <th className="text-center py-4 px-4 text-sm font-bold text-gold uppercase tracking-wider">
-                    Referrals
-                  </th>
-                  <th className="text-right py-4 px-4 text-sm font-bold text-gold uppercase tracking-wider">
-                    Prize
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {getLeaderboardData().map((user, index) => {
+          <ResponsiveTable
+            data={getLeaderboardData()}
+            loading={loading}
+            columns={[
+              {
+                header: 'Rank',
+                accessor: 'rank',
+                render: (value, item, index) => {
                   const rank = index + 1
-                  // const isQualified = user.referrals >= 10
-                  const isQualified = user.referrals >= 1
-                  
                   return (
-                    <tr
-                      key={user.id || `user-${index}`}
-                      className={`border-b border-gray-700/50 hover:bg-gray-800/50 ${
-                        rank <= 3 
-                          ? 'bg-gradient-to-r from-gold/10 to-yellow-600/10' 
-                          : 'hover:bg-gray-800/50'
-                      } ${!isQualified ? 'opacity-60' : ''}`}
-                    >
-                      <td className="py-4 px-4">
-                        <div className="flex items-center space-x-3">
-                          <span className="text-2xl font-bold text-gray-400 min-w-[2rem] text-center">
-                            {rank}
-                          </span>
-                          {getRankIcon(rank)}
-                        </div>
-                      </td>
-                      
-                      <td className="py-4 px-4">
-                        <div>
-                          <p className="font-semibold text-white">
-                            {user.email.replace(/(.{2}).*(@.*)/, '$1***$2')}
-                          </p>
-                          {!isQualified && (
-                            <p className="text-xs text-yellow-500">
-                              (Need {10 - user.referrals} more to qualify)
-                            </p>
-                          )}
-                        </div>
-                      </td>
-                      
-                      <td className="py-4 px-4 text-center">
-                        <div className="flex items-center justify-center space-x-2">
-                          <Users className="w-5 h-5 text-blue-400" />
-                          <span className="text-lg font-semibold text-white">
-                            {user.referrals}
-                          </span>
-                        </div>
-                      </td>
-                      
-                      <td className="py-4 px-4 text-right">
-                        <div>
-                          <p className={`text-lg font-bold ${
-                            isQualified ? 'text-gold' : 'text-gray-500'
-                          }`}>
-                            {formatCurrency(getPrize(rank))}
-                          </p>
-                          {/* {rank <= 3 && isQualified && (
-                            <p className="text-xs text-gold">Prize Winner!</p>
-                          )} */}
-                        </div>
-                      </td>
-                    </tr>
+                    <div className="flex items-center space-x-3">
+                      <span className="text-2xl font-bold text-gray-400 min-w-[2rem] text-center">
+                        {rank}
+                      </span>
+                      {getRankIcon(rank)}
+                    </div>
                   )
-                })}
-              </tbody>
-            </table>
-          </div>
+                }
+              },
+              {
+                header: 'Player',
+                accessor: 'email',
+                render: (value, item, index) => {
+                  const rank = index + 1
+                  const isQualified = item.referrals >= 1
+                  return (
+                    <div>
+                      <p className="font-semibold text-white break-all">
+                        {value.replace(/(.{2}).*(@.*)/, '$1***$2')}
+                      </p>
+                      {!isQualified && (
+                        <p className="text-xs text-yellow-500">
+                          (Need {10 - item.referrals} more to qualify)
+                        </p>
+                      )}
+                    </div>
+                  )
+                }
+              },
+              {
+                header: 'Referrals',
+                accessor: 'referrals',
+                render: (value) => (
+                  <div className="flex items-center justify-center space-x-2">
+                    <Users className="w-5 h-5 text-blue-400" />
+                    <span className="text-lg font-semibold text-white">
+                      {value}
+                    </span>
+                  </div>
+                ),
+                headerClassName: 'text-center',
+                cellClassName: 'text-center'
+              },
+              {
+                header: 'Prize',
+                accessor: 'prize',
+                render: (value, item, index) => {
+                  const rank = index + 1
+                  const isQualified = item.referrals >= 1
+                  return (
+                    <div>
+                      <p className={`text-lg font-bold ${
+                        isQualified ? 'text-gold' : 'text-gray-500'
+                      }`}>
+                        {formatCurrency(getPrize(rank))}
+                      </p>
+                    </div>
+                  )
+                },
+                headerClassName: 'text-right',
+                cellClassName: 'text-right'
+              }
+            ]}
+            mobileCardClassName={(item, index) => {
+              const rank = index + 1
+              const isQualified = item.referrals >= 1
+              return `${
+                rank <= 3 
+                  ? 'bg-gradient-to-r from-gold/10 to-yellow-600/10 border-gold/30' 
+                  : ''
+              } ${!isQualified ? 'opacity-60' : ''}`
+            }}
+            emptyMessage="No leaderboard data available"
+          />
         </Card>
       </div>
     </section>

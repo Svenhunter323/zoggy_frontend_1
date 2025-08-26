@@ -6,6 +6,7 @@ import { formatCurrency } from '../utils/reward'
 import Header from '../components/Header'
 import Button from '../components/Button'
 import Card from '../components/Card'
+import ResponsiveTable from '../components/ResponsiveTable'
 import { useToast } from '../contexts/ToastContext'
 
 
@@ -93,40 +94,40 @@ const AdminPage = () => {
               <h2 className="text-2xl font-bold text-white">Users</h2>
             </div>
             
-            {usersLoading ? (
-              <div className="space-y-4">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="h-16 bg-gray-700 rounded animate-pulse"></div>
-                ))}
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-700">
-                      <th className="text-left py-3 text-gray-300">Email</th>
-                      <th className="text-left py-3 text-gray-300">Claim Code</th>
-                      <th className="text-left py-3 text-gray-300">Credits</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {(users || []).map((user, index) => (
-                      <tr key={user.id || `user-${index}`} className="border-b border-gray-800">
-                        <td className="py-3 text-white font-mono text-sm">
-                          {maskEmail(user.email)}
-                        </td>
-                        <td className="py-3 text-gold font-mono text-sm">
-                          {user.claimCode}
-                        </td>
-                        <td className="py-3 text-green-400 font-semibold">
-                          {formatCurrency((user.credits+user.cents) || 0)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+            <ResponsiveTable
+              data={users || []}
+              loading={usersLoading}
+              columns={[
+                {
+                  header: 'Email',
+                  accessor: 'email',
+                  render: (value) => (
+                    <span className="text-white font-mono text-sm break-all">
+                      {maskEmail(value)}
+                    </span>
+                  )
+                },
+                {
+                  header: 'Claim Code',
+                  accessor: 'claimCode',
+                  render: (value) => (
+                    <span className="text-gold font-mono text-sm">
+                      {value}
+                    </span>
+                  )
+                },
+                {
+                  header: 'Credits',
+                  accessor: 'credits',
+                  render: (value, item) => (
+                    <span className="text-green-400 font-semibold">
+                      {formatCurrency((item.credits + item.cents) || 0)}
+                    </span>
+                  )
+                }
+              ]}
+              emptyMessage="No users found"
+            />
           </Card>
 
           {/* Referrals Table */}
@@ -136,40 +137,36 @@ const AdminPage = () => {
               <h2 className="text-2xl font-bold text-white">Referrals</h2>
             </div>
             
-            {referralsLoading ? (
-              <div className="space-y-4">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="h-16 bg-gray-700 rounded animate-pulse"></div>
-                ))}
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-700">
-                      <th className="text-left py-3 text-gray-300">Referrer</th>
-                      <th className="text-left py-3 text-gray-300">Referred</th>
-                      <th className="text-left py-3 text-gray-300">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {(referrals || []).map((referral, index) => (
-                      <tr key={referral.id || `referral-${index}`} className="border-b border-gray-800">
-                        <td className="py-3 text-white font-mono text-sm">
-                          {maskEmail(referral.referrerEmail)}
-                        </td>
-                        <td className="py-3 text-white font-mono text-sm">
-                          {maskEmail(referral.referredEmail)}
-                        </td>
-                        <td className="py-3">
-                          {getStatusChip(referral.status)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+            <ResponsiveTable
+              data={referrals || []}
+              loading={referralsLoading}
+              columns={[
+                {
+                  header: 'Referrer',
+                  accessor: 'referrerEmail',
+                  render: (value) => (
+                    <span className="text-white font-mono text-sm break-all">
+                      {maskEmail(value)}
+                    </span>
+                  )
+                },
+                {
+                  header: 'Referred',
+                  accessor: 'referredEmail',
+                  render: (value) => (
+                    <span className="text-white font-mono text-sm break-all">
+                      {maskEmail(value)}
+                    </span>
+                  )
+                },
+                {
+                  header: 'Status',
+                  accessor: 'status',
+                  render: (value) => getStatusChip(value)
+                }
+              ]}
+              emptyMessage="No referrals found"
+            />
           </Card>
         </div>
       </div>

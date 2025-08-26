@@ -1,22 +1,35 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Twitter, Copy, Gift, Sparkles } from 'lucide-react'
+import { X, Twitter, Copy, Gift, Sparkles, Star, Zap } from 'lucide-react'
 import Button from './Button'
 import { useToast } from '../contexts/ToastContext'
+import chestImage from '../assets/chest.png'
 
 const CaseOpenModal = ({ isOpen, onClose, reward }) => {
   const [showReward, setShowReward] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [chestOpened, setChestOpened] = useState(false)
   const { showToast } = useToast()
 
   useEffect(() => {
     if (isOpen && reward) {
-      const timer = setTimeout(() => {
+      // First show chest opening animation
+      const openTimer = setTimeout(() => {
+        setChestOpened(true)
+      }, 800)
+      
+      // Then show reward after chest opens
+      const rewardTimer = setTimeout(() => {
         setShowReward(true)
-      }, 1000)
-      return () => clearTimeout(timer)
+      }, 2000)
+      
+      return () => {
+        clearTimeout(openTimer)
+        clearTimeout(rewardTimer)
+      }
     } else {
       setShowReward(false)
+      setChestOpened(false)
     }
   }, [isOpen, reward])
 
@@ -72,41 +85,108 @@ const CaseOpenModal = ({ isOpen, onClose, reward }) => {
             {/* Chest Opening Animation */}
             <div className="mb-8 relative">
               <motion.div
-                initial={{ scale: 1 }}
-                animate={{ 
-                  scale: showReward ? [1, 1.2, 1] : 1,
-                  rotate: showReward ? [0, 5, -5, 0] : 0
-                }}
-                transition={{ duration: 0.6, ease: "easeInOut" }}
-                className="w-32 h-32 mx-auto mb-4 relative"
+                className="w-40 h-40 mx-auto mb-4 relative"
               >
-                <div className="w-full h-full bg-gradient-to-br from-yellow-600 via-gold to-yellow-500 rounded-2xl shadow-2xl flex items-center justify-center">
-                  <Gift className="w-16 h-16 text-gray-900" />
-                </div>
+                {/* Background glow effect */}
+                <motion.div
+                  animate={chestOpened ? {
+                    scale: [1, 2, 1.5],
+                    opacity: [0, 0.8, 0.4]
+                  } : {}}
+                  transition={{ duration: 1.5, ease: "easeOut" }}
+                  className="absolute inset-0 bg-gold/30 rounded-full blur-2xl"
+                />
                 
-                {/* Sparkles Animation */}
+                {/* Chest Image */}
+                <motion.img
+                  src={chestImage}
+                  alt="Opening Chest"
+                  className="w-full h-full object-contain relative z-10"
+                  animate={chestOpened ? {
+                    rotateY: [0, 180, 360],
+                    scale: [1, 1.3, 1.1],
+                    y: [0, -30, -20]
+                  } : {
+                    scale: [1, 1.05, 1],
+                    rotate: [0, 2, -2, 0]
+                  }}
+                  transition={chestOpened ? {
+                    duration: 1.2,
+                    ease: "easeInOut"
+                  } : {
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                
+                {/* Explosion sparkles */}
                 <AnimatePresence>
-                  {showReward && (
+                  {chestOpened && (
                     <>
-                      {[...Array(6)].map((_, i) => (
+                      {/* Main sparkle burst */}
+                      {[...Array(12)].map((_, i) => (
                         <motion.div
-                          key={i}
-                          initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
-                          animate={{ 
+                          key={`sparkle-${i}`}
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{
+                            opacity: [0, 1, 0.5, 0],
+                            scale: [0, 1.5, 1, 0],
+                            x: [0, Math.cos(i * 30 * Math.PI / 180) * 100],
+                            y: [0, Math.sin(i * 30 * Math.PI / 180) * 100],
+                            rotate: [0, 360]
+                          }}
+                          transition={{
+                            duration: 2,
+                            delay: 0.3 + i * 0.05,
+                            ease: "easeOut"
+                          }}
+                          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                        >
+                          <Star className="w-4 h-4 text-gold" />
+                        </motion.div>
+                      ))}
+                      
+                      {/* Secondary sparkle layer */}
+                      {[...Array(8)].map((_, i) => (
+                        <motion.div
+                          key={`zap-${i}`}
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{
+                            opacity: [0, 1, 0],
+                            scale: [0, 1, 0],
+                            x: [0, Math.cos(i * 45 * Math.PI / 180) * 80],
+                            y: [0, Math.sin(i * 45 * Math.PI / 180) * 80]
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            delay: 0.6 + i * 0.08,
+                            ease: "easeOut"
+                          }}
+                          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                        >
+                          <Zap className="w-3 h-3 text-yellow-400" />
+                        </motion.div>
+                      ))}
+                      
+                      {/* Floating particles */}
+                      {[...Array(15)].map((_, i) => (
+                        <motion.div
+                          key={`particle-${i}`}
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{
                             opacity: [0, 1, 0],
                             scale: [0, 1, 0],
                             x: [0, (Math.random() - 0.5) * 200],
                             y: [0, (Math.random() - 0.5) * 200]
                           }}
-                          transition={{ 
-                            duration: 2,
-                            delay: i * 0.1,
+                          transition={{
+                            duration: 3,
+                            delay: 0.8 + i * 0.1,
                             ease: "easeOut"
                           }}
-                          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                        >
-                          <Sparkles className="w-6 h-6 text-gold" />
-                        </motion.div>
+                          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-gold rounded-full"
+                        />
                       ))}
                     </>
                   )}
@@ -114,31 +194,86 @@ const CaseOpenModal = ({ isOpen, onClose, reward }) => {
               </motion.div>
 
               {/* Opening Text */}
-              {!showReward ? (
-                <motion.div
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: showReward ? 0 : 1 }}
-                  className="text-2xl font-bold text-white font-poppins"
-                >
-                  Opening your daily case...
-                </motion.div>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  <h2 className="text-3xl font-bold text-white mb-2 font-poppins">
-                    Congratulations! 🎉
-                  </h2>
-                  <div className="text-5xl font-bold text-gold mb-4 font-poppins animate-glow">
-                    {reward?.amount || '$0.00'}
-                  </div>
-                  <p className="text-gray-300 font-montserrat">
-                    You've earned {reward?.amount || '$0.00'} from your daily case!
-                  </p>
-                </motion.div>
-              )}
+              <AnimatePresence mode="wait">
+                {!chestOpened ? (
+                  <motion.div
+                    key="opening"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="text-2xl font-bold text-white font-poppins"
+                  >
+                    Opening your daily chest...
+                  </motion.div>
+                ) : !showReward ? (
+                  <motion.div
+                    key="revealing"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className="text-2xl font-bold text-gold font-poppins animate-pulse"
+                  >
+                    ✨ Revealing your prize... ✨
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="reward"
+                    initial={{ opacity: 0, y: 30, scale: 0.8 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ 
+                      type: "spring",
+                      damping: 15,
+                      stiffness: 300,
+                      delay: 0.2
+                    }}
+                  >
+                    <motion.h2 
+                      className="text-3xl font-bold text-white mb-4 font-poppins"
+                      animate={{ 
+                        scale: [1, 1.05, 1],
+                        textShadow: [
+                          "0 0 0px rgba(255,215,0,0)",
+                          "0 0 20px rgba(255,215,0,0.8)",
+                          "0 0 0px rgba(255,215,0,0)"
+                        ]
+                      }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      🎉 Congratulations! 🎉
+                    </motion.h2>
+                    
+                    <motion.div 
+                      className="text-6xl font-bold text-gold mb-6 font-poppins"
+                      initial={{ scale: 0 }}
+                      animate={{ 
+                        scale: [0, 1.2, 1],
+                        rotate: [0, 5, -5, 0]
+                      }}
+                      transition={{ 
+                        type: "spring",
+                        damping: 10,
+                        stiffness: 200,
+                        delay: 0.5
+                      }}
+                      style={{
+                        filter: "drop-shadow(0 0 20px rgba(255,215,0,0.8))",
+                        textShadow: "0 0 30px rgba(255,215,0,0.6)"
+                      }}
+                    >
+                      {reward?.amount || '$0.00'}
+                    </motion.div>
+                    
+                    <motion.p 
+                      className="text-gray-300 font-montserrat text-lg"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1 }}
+                    >
+                      Amazing! You've earned <span className="text-gold font-semibold">{reward?.amount || '$0.00'}</span> from your daily chest!
+                    </motion.p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* Share Section */}

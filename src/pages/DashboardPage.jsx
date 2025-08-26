@@ -5,6 +5,7 @@ import DailyChest from '../components/DailyChest'
 import CopyField from '../components/CopyField'
 import Card from '../components/Card'
 import LatestWins from '../components/LatestWins'
+import Leaderboard from '../components/Leaderboard'
 import Carousel from '../components/Carousel'
 import { Gift, Users, Trophy, MessageCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -48,7 +49,7 @@ const DashboardPage = () => {
   if (!user || loading) {
     return (
       <div className="min-h-screen bg-gray-950">
-        <Header minimal={false} title="WAITLIST" />
+        <Header minimal={false} title="" />
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-white text-xl">Loading...</div>
         </div>
@@ -59,7 +60,7 @@ const DashboardPage = () => {
   if (!dashboardData) {
     return (
       <div className="min-h-screen bg-gray-950">
-        <Header minimal={false} title="WAITLIST" />
+        <Header minimal={false} title="" />
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-white text-xl">Failed to load dashboard</div>
         </div>
@@ -69,7 +70,7 @@ const DashboardPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-      <Header minimal={false} title="WAITLIST" />
+      <Header minimal={false} title="" />
       
       {/* Hero Banner Carousel Section */}
       <div className="h-64 md:h-80 lg:h-96 relative overflow-hidden">
@@ -237,6 +238,9 @@ const DashboardPage = () => {
 
         {/* Live Wins */}
         <LatestWins />
+        
+        {/* Referral Leaderboard */}
+        <Leaderboard />
       </div>
 
       {/* <ToastContainer /> */}
