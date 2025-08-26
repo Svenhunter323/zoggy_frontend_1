@@ -146,7 +146,7 @@ const DashboardPage = () => {
         {/* Referral Section */}
         <div className="mb-12">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-white mb-4 font-poppins">
+            <h2 className="font-bold text-white mb-4 font-poppins text-lg sm:text-2xl md:text-3xl">
               For every person who joins with your link, you will get referral
             </h2>
           </div>
@@ -191,9 +191,9 @@ const DashboardPage = () => {
         {/* Daily Case Section */}
         <div className="mb-12">
           <div className="text-center mb-8">
-            <h2 className="text-4xl font-bold text-white mb-4 font-poppins">
+            {/* <h2 className="text-4xl font-bold text-white mb-4 font-poppins">
               DAILY CASE
-            </h2>
+            </h2> */}
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8">

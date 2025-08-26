@@ -16,9 +16,10 @@ const HeroSection = ({ onJoinWaitlist }) => {
   
   // Debug: Log image paths
   console.log('Banner images:', bannerImages);
-  
+
+
   return (
-    <section className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
+    <section className={`${user ? 'min-h-fit' : 'min-h-screen'} bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950`}>
       {/* Banner Carousel Section */}
       <div className="h-64 md:h-80 lg:h-96 relative overflow-hidden">
         <Carousel 
@@ -53,65 +54,32 @@ const HeroSection = ({ onJoinWaitlist }) => {
       </div>
       
       {/* Hero Text Content */}
-      <div className="flex items-center justify-center px-6 py-12 min-h-[calc(100vh-24rem)]">
-        <div className="max-w-5xl mx-auto text-center relative">
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mb-8"
-        >
-          {/* <div className="w-32 h-32 mx-auto mb-8 relative">
+      {!user && (
+        <div className="flex items-center justify-center px-6 py-12 min-h-[calc(100vh-24rem)]">
+          <div className="max-w-5xl mx-auto text-center relative">
             <motion.div
-              animate={{ 
-                rotateY: [0, 360],
-                scale: [1, 1.1, 1]
-              }}
-              transition={{ 
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className="w-full h-full bg-gradient-to-br from-gold to-yellow-500 rounded-2xl shadow-2xl flex items-center justify-center"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="mb-8"
             >
-              <Gift className="w-16 h-16 text-gray-900 drop-shadow-lg" />
             </motion.div>
 
-          </div> */}
-{/* 
-          <h1 className="text-6xl md:text-8xl font-bold mb-8 leading-tight font-poppins">
-            <span className="text-white drop-shadow-2xl">Open Your Daily Chest.</span>
-            <br />
-            <span className="bg-gradient-to-r from-gold via-yellow-400 to-gold bg-clip-text text-transparent animate-glow drop-shadow-2xl">
-              Win up to $10,000.
-            </span>
-          </h1> */}
-          
-          <p className="text-2xl md:text-3xl text-gray-200 mb-16 max-w-3xl mx-auto font-montserrat font-light leading-relaxed">
-            {/* Join thousands of players opening daily chests and winning real money.  */}
-            <br className="hidden md:block" />
-            <span className="text-gold font-medium">Get early access and start earning today.</span>
-
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-        >
-          {!user && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
             <EnhancedEmailSignup 
               onSuccess={(data) => {
                 console.log('Signup successful:', data)
                 // User will be automatically redirected to dashboard
               }}
             />
-          )}
-        </motion.div>
+            </motion.div>
+          </div>
         </div>
-      </div>
+      )}
     </section>
   )
 }

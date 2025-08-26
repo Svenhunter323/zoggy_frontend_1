@@ -101,12 +101,12 @@ const Leaderboard = () => {
           <p className="text-xl text-gray-400 mb-6">
             Top 10 referrers win cash prizes!
           </p>
-          <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 max-w-2xl mx-auto">
+          {/* <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 max-w-2xl mx-auto">
             <p className="text-gold text-sm">
               <strong>Eligibility:</strong> Must have at least 10 verified referrals to qualify for prizes. 
               Contest ends when we launch publicly.
             </p>
-          </div>
+          </div> */}
         </div>
 
         <Card>

@@ -415,13 +415,13 @@ const EnhancedEmailSignup = ({ onSuccess }) => {
           disabled={isSubmitDisabled}
           className="w-full text-xl py-4 bg-gradient-to-r from-brand to-red-700 hover:from-red-600 hover:to-red-800 transform hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-brand/50"
         >
-          {isLoading ? 'Joining...' : 'Join Waitlist & Start Earning'}
+          {isLoading ? 'Joining...' : 'JOIN THE WAITLIST'}
         </Button>
 
         <div className="text-center">
-          <p className="text-sm text-gray-400 font-montserrat">
+          {/* <p className="text-sm text-gray-400 font-montserrat">
             🎁 <span className="text-gold">Instant access</span> • No verification required • Start earning immediately
-          </p>
+          </p> */}
           
           {validationState.isValid && email.trim() && !validationState.emailExists && (
             <motion.p

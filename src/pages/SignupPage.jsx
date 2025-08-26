@@ -8,6 +8,7 @@ import Button from '../components/Button'
 import Card from '../components/Card'
 import { useToast } from '../contexts/ToastContext'
 import { useAuth } from '../contexts/AuthContext'
+import { generateDeviceFingerprint } from '../utils/deviceFingerprint'
 const SignupPage = () => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -19,12 +20,17 @@ const SignupPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [referralCode, setReferralCode] = useState('')
   const [emailValid, setEmailValid] = useState(null)
+  const [deviceFingerprint, setDeviceFingerprint] = useState(null)
 
   useEffect(() => {
     const refCode = searchParams.get('ref')
     if (refCode) {
       setReferralCode(refCode)
     }
+    
+    // Generate device fingerprint
+    const fingerprint = generateDeviceFingerprint()
+    setDeviceFingerprint(fingerprint)
   }, [searchParams])
 
   // Real-time email validation
@@ -62,7 +68,11 @@ const SignupPage = () => {
     setIsLoading(true)
     
     try {
-      const signupResponse = await authAPI.signup(email, referralCode || null)
+      const signupResponse = await authAPI.signup(
+        email, 
+        referralCode || null, 
+        deviceFingerprint
+      )
       
       // Instant auto-login after successful signup
       try {
