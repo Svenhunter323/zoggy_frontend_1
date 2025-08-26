@@ -7,6 +7,8 @@ import Card from '../components/Card'
 import LatestWins from '../components/LatestWins'
 import Leaderboard from '../components/Leaderboard'
 import Carousel from '../components/Carousel'
+import CaseOpenModal from '../components/CaseOpenModal'
+import TelegramModal from '../components/TelegramModal'
 import { Gift, Users, Trophy, MessageCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Button from '../components/Button'
@@ -18,13 +20,35 @@ import banner2 from '../assets/banerrs/2.png'
 import banner3 from '../assets/banerrs/3.jpg'
 
 const DashboardPage = () => {
-  const { user } = useAuth()
+  const { user, fetchUser } = useAuth()
   const { showToast } = useToast()
   const [dashboardData, setDashboardData] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [showCaseModal, setShowCaseModal] = useState(false)
+  const [showTelegramModal, setShowTelegramModal] = useState(false)
+  const [reward, setReward] = useState(null)
   const bannerImages = [banner0, banner1, banner2, banner3]
   const channelHandle = import.meta.env.VITE_TG_CHANNEL_HANDLE || '@zoggytestchannel'
-  
+
+  const handleOpenChest = (rewardData) => {
+    setReward(rewardData)
+    setShowCaseModal(true)
+  }
+
+  const handleShowTelegramModal = () => {
+    setShowTelegramModal(true)
+  }
+
+  const handleCloseCaseModal = async () => {
+    setShowCaseModal(false)
+    setReward(null)
+    await fetchUser() // Refresh user data
+  }
+
+  const handleCloseTelegramModal = () => {
+    setShowTelegramModal(false)
+  }
+
   useEffect(() => {
     // document.title = 'WAITLIST'
   }, [])
@@ -57,7 +81,7 @@ const DashboardPage = () => {
       </div>
     )
   }
-// console.log("dashboard data:", dashboardData)
+
   if (!dashboardData) {
     return (
       <div className="min-h-screen bg-gray-950">
@@ -72,16 +96,16 @@ const DashboardPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       <Header minimal={false} title="" />
-      
+
       {/* Hero Banner Carousel Section */}
       <div className="h-64 md:h-80 lg:h-96 relative overflow-hidden">
-        <Carousel 
+        <Carousel
           images={bannerImages}
           autoSlide={true}
           slideInterval={6000}
           className="w-full h-full"
         />
-        
+
         {/* Overlay Text */}
         <div className="absolute inset-0 flex items-center justify-center z-40">
           <div className="text-center px-4">
@@ -97,7 +121,7 @@ const DashboardPage = () => {
                   Open Daily Chests
                 </span>
               </h1>
-              
+
               <p className="text-lg md:text-xl lg:text-2xl text-gray-200 max-w-2xl mx-auto font-montserrat font-light leading-relaxed drop-shadow-lg">
                 Manage your account and earn rewards daily
               </p>
@@ -115,7 +139,7 @@ const DashboardPage = () => {
             </div>
             <h3 className="text-xl font-bold text-white mb-2 font-poppins">Waitlist Position</h3>
             <div className="text-3xl font-bold text-gold mb-1 font-poppins">
-            #&nbsp;{dashboardData.position || '---'}
+              #&nbsp;{dashboardData.position || '---'}
             </div>
             <p className="text-gray-400 text-sm font-montserrat">Your current position</p>
           </Card>
@@ -167,14 +191,15 @@ const DashboardPage = () => {
                   label="Claim Code"
                 />
               </div>
-              
+
               <div>
                 <CopyField
-                  value={`${window.location.origin}/signup?ref=${dashboardData.referralCode || 'DEFAULT_CODE'}`}
+                  // value={`${window.location.origin}/signup?ref=${dashboardData.referralCode || 'DEFAULT_CODE'}`}
+                  value={`${window.location.origin}?ref=${dashboardData.referralCode || ''}`}
                   label="Referral Link"
                 />
               </div>
-              
+
               <div className="bg-gold/10 border border-gold/30 rounded-lg p-4">
                 <div className="flex justify-between items-center">
                   <span className="text-white font-semibold">Current Balance:</span>
@@ -199,7 +224,11 @@ const DashboardPage = () => {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Left: Big Chest */}
             <Card className="text-center">
-              <DailyChest dashboardData={dashboardData} />
+              <DailyChest
+                dashboardData={dashboardData}
+                onOpenChest={handleOpenChest}
+                onShowTelegramModal={handleShowTelegramModal}
+              />
             </Card>
 
             {/* Right: Telegram Requirement */}
@@ -212,7 +241,7 @@ const DashboardPage = () => {
                 <p className="text-lg text-gray-300 font-montserrat leading-relaxed">
                   You must connect Telegram and join our group to be eligible to open a daily case and earn rewards.
                 </p>
-                
+
                 {dashboardData.telegram?.linked && (
                   <div className="mt-4 flex items-center space-x-2">
                     <div className={`w-3 h-3 rounded-full ${dashboardData.telegram.verified ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
@@ -222,7 +251,7 @@ const DashboardPage = () => {
                   </div>
                 )}
               </div>
-              
+
               <Button
                 variant="primary"
                 size="lg"
@@ -239,10 +268,23 @@ const DashboardPage = () => {
 
         {/* Live Wins */}
         <LatestWins />
-        
+
         {/* Referral Leaderboard */}
         <Leaderboard />
       </div>
+
+      {/* Modals */}
+      <CaseOpenModal
+        isOpen={showCaseModal}
+        onClose={handleCloseCaseModal}
+        reward={reward}
+      />
+
+      {showTelegramModal && (
+        <TelegramModal
+          onClose={handleCloseTelegramModal}
+        />
+      )}
 
       {/* <ToastContainer /> */}
     </div>

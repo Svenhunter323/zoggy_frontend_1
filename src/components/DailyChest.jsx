@@ -7,25 +7,20 @@ import { chestAPI } from '../api/endpoints'
 import Button from './Button'
 import Card from './Card'
 import Countdown from './Countdown'
-import CaseOpenModal from './CaseOpenModal'
-import TelegramModal from './TelegramModal'
 import { useToast } from '../contexts/ToastContext'
 import chestImage from '../assets/chest.png'
 
-const DailyChest = ({ dashboardData }) => {
-  const { user, fetchUser } = useAuth()
+const DailyChest = ({ dashboardData, onOpenChest, onShowTelegramModal }) => {
+  const { user } = useAuth()
   const { showToast } = useToast()
-  const [showCaseModal, setShowCaseModal] = useState(false)
-  const [showTelegramModal, setShowTelegramModal] = useState(false)
   const [isOpening, setIsOpening] = useState(false)
-  const [reward, setReward] = useState(null)
 
   const canOpen = canOpenChest(dashboardData?.lastOpenAt, dashboardData?.cooldownSeconds)
   const nextChestTime = getNextChestTime(dashboardData?.lastOpenAt, dashboardData?.cooldownSeconds)
 
   const handleOpenChest = async () => {
     if (!dashboardData?.telegram?.verified) {
-      setShowTelegramModal(true)
+      onShowTelegramModal()
       return
     }
 
@@ -38,13 +33,13 @@ const DailyChest = ({ dashboardData }) => {
       setIsOpening(true)
       const response = await chestAPI.open()
       
-      // Set reward data for the modal
-      setReward({
+      // Pass reward data to parent
+      const rewardData = {
         amount: response.data?.reward || '$5.00',
         type: response.data?.type || 'cash'
-      })
+      }
       
-      setShowCaseModal(true)
+      onOpenChest(rewardData)
     } catch (error) {
       console.error('Failed to open chest:', error)
       showToast('Failed to open chest. Please try again.', 'error')
@@ -173,22 +168,6 @@ const DailyChest = ({ dashboardData }) => {
           </div>
         )}
       </Card>
-
-      <CaseOpenModal
-        isOpen={showCaseModal}
-        onClose={async () => {
-          setShowCaseModal(false)
-          setReward(null)
-          await fetchUser() // Refresh user data
-        }}
-        reward={reward}
-      />
-
-      {showTelegramModal && (
-        <TelegramModal
-          onClose={() => setShowTelegramModal(false)}
-        />
-      )}
     </>
   )
 }

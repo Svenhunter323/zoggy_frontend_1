@@ -51,7 +51,7 @@ export const authAPI = {
   signup: (email, referralCode = null, deviceFingerprint = null) => 
     api.post('/auth/signup', { 
       email, 
-      referralCode,
+      ref: referralCode,
       deviceFingerprint,
       timestamp: Date.now()
     }),

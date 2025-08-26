@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Mail, CheckCircle, AlertCircle, Loader, Shield, Clock } from 'lucide-react'
+import { Mail, CheckCircle, AlertCircle, Loader, Shield, Clock, Gift } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { authAPI } from '../api/endpoints'
 import { useAuth } from '../contexts/AuthContext'
@@ -19,7 +19,7 @@ import {
   recordDeviceAttempt 
 } from '../utils/rateLimiting'
 
-const EnhancedEmailSignup = ({ onSuccess }) => {
+const EnhancedEmailSignup = ({ onSuccess, forceEnable = false }) => {
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isCheckingEmail, setIsCheckingEmail] = useState(false)
@@ -36,17 +36,25 @@ const EnhancedEmailSignup = ({ onSuccess }) => {
   })
   const [deviceFingerprint, setDeviceFingerprint] = useState(null)
   const [hasSubmitted, setHasSubmitted] = useState(false)
+  const [referralCode, setReferralCode] = useState('')
 
   const { setToken, setUser } = useAuth()
   const navigate = useNavigate()
   const { showToast } = useToast()
 
-  // Initialize device fingerprint and check rate limits
+  // Initialize device fingerprint, check rate limits, and get referral code
   useEffect(() => {
     const initializeChecks = async () => {
       // Generate device fingerprint
       const fingerprint = generateDeviceFingerprint()
       setDeviceFingerprint(fingerprint)
+      
+      // Get referral code from URL
+      const urlParams = new URLSearchParams(window.location.search)
+      const refCode = urlParams.get('ref')
+      if (refCode) {
+        setReferralCode(refCode)
+      }
 
       // Check if device has already signed up
       if (hasDeviceSignedUpBefore()) {
@@ -191,7 +199,7 @@ const EnhancedEmailSignup = ({ onSuccess }) => {
       return
     }
 
-    if (!rateLimitState.allowed) {
+    if (!rateLimitState.allowed && !forceEnable) {
       showToast(rateLimitState.message, 'error')
       return
     }
@@ -217,7 +225,6 @@ const EnhancedEmailSignup = ({ onSuccess }) => {
       ])
 
       // Attempt signup with device fingerprint
-      const referralCode = new URLSearchParams(window.location.search).get('ref')
       const response = await authAPI.signup(
         email.trim().toLowerCase(), 
         referralCode, 
@@ -343,15 +350,17 @@ const EnhancedEmailSignup = ({ onSuccess }) => {
               value={email}
               onChange={handleEmailChange}
               className={`w-full pl-12 pr-12 py-4 bg-gray-800/50 backdrop-blur-sm border-2 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-all duration-300 text-lg ${
-                !rateLimitState.allowed
+                (isLoading || (!rateLimitState.allowed && !forceEnable))
                   ? 'border-red-500 bg-red-500/5 cursor-not-allowed'
+                  : (!forceEnable)
+                  ? 'border-gray-500 bg-gray-500/5 cursor-not-allowed'
                   : validationState.errors.length > 0
-                  ? 'border-red-500 focus:border-red-400 focus:ring-2 focus:ring-red-400/20' 
+                  ? 'border-red-500 focus:border-red-400 focus:ring-2 focus:ring-red-400/20 cursor-text' 
                   : validationState.isValid && email.trim()
-                  ? 'border-green-500 focus:border-green-400 focus:ring-2 focus:ring-green-400/20'
-                  : 'border-gray-600 focus:border-gold focus:ring-2 focus:ring-gold/20'
+                  ? 'border-green-500 focus:border-green-400 focus:ring-2 focus:ring-green-400/20 cursor-text'
+                  : 'border-gray-600 focus:border-gold focus:ring-2 focus:ring-gold/20 cursor-text'
               }`}
-              disabled={isLoading || !rateLimitState.allowed}
+              disabled={isLoading || (!rateLimitState.allowed && !forceEnable)}
               autoComplete="email"
               spellCheck="false"
             />
@@ -392,6 +401,28 @@ const EnhancedEmailSignup = ({ onSuccess }) => {
             )}
           </AnimatePresence>
 
+          {/* Referral Code Display */}
+          <AnimatePresence>
+            {referralCode && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="mt-3 p-3 bg-gold/10 border border-gold/30 rounded-lg"
+              >
+                <div className="flex items-center space-x-2">
+                  <Gift className="w-4 h-4 text-gold" />
+                  <p className="text-gold text-sm font-semibold">
+                    You were referred! Referral Code: <span className="font-mono">{referralCode}</span>
+                  </p>
+                </div>
+                {/* <p className="text-gold/80 text-xs mt-1 ml-6">
+                  You'll get a bonus chest when you join!
+                </p> */}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* Checking Status */}
           <AnimatePresence>
             {(isCheckingEmail || validationState.isChecking) && (
@@ -412,7 +443,7 @@ const EnhancedEmailSignup = ({ onSuccess }) => {
           variant="primary"
           size="lg"
           loading={isLoading}
-          disabled={isSubmitDisabled}
+          disabled={isSubmitDisabled && (!forceEnable)}
           className="w-full text-xl py-4 bg-gradient-to-r from-brand to-red-700 hover:from-red-600 hover:to-red-800 transform hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-brand/50"
         >
           {isLoading ? 'Joining...' : 'JOIN THE WAITLIST'}

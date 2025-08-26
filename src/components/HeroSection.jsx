@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Gift } from 'lucide-react'
 import Button from './Button'
@@ -13,6 +13,14 @@ import banner3 from '../assets/banerrs/3.jpg'
 const HeroSection = ({ onJoinWaitlist }) => {
   const { user } = useAuth();
   const bannerImages = [banner0, banner1, banner2, banner3];
+  const [hasReferralCode, setHasReferralCode] = useState(false);
+
+  // Check for referral code in URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const refCode = urlParams.get('ref');
+    setHasReferralCode(!!refCode);
+  }, []);
   
   // Debug: Log image paths
   console.log('Banner images:', bannerImages);
@@ -54,7 +62,7 @@ const HeroSection = ({ onJoinWaitlist }) => {
       </div>
       
       {/* Hero Text Content */}
-      {!user && (
+      {(!user || hasReferralCode) && (
         <div className="flex items-center justify-center px-6 py-12 min-h-[calc(100vh-24rem)]">
           <div className="max-w-5xl mx-auto text-center relative">
             <motion.div
@@ -75,6 +83,7 @@ const HeroSection = ({ onJoinWaitlist }) => {
                 console.log('Signup successful:', data)
                 // User will be automatically redirected to dashboard
               }}
+              forceEnable={hasReferralCode}
             />
             </motion.div>
           </div>

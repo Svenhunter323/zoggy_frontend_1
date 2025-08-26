@@ -4,8 +4,10 @@ import { X, Twitter, Copy, Gift, Sparkles, Star, Zap } from 'lucide-react'
 import Button from './Button'
 import { useToast } from '../contexts/ToastContext'
 import chestImage from '../assets/chest.png'
+import { useAuth } from '../contexts/AuthContext'
 
 const CaseOpenModal = ({ isOpen, onClose, reward }) => {
+  const { user } = useAuth()
   const [showReward, setShowReward] = useState(false)
   const [copied, setCopied] = useState(false)
   const [chestOpened, setChestOpened] = useState(false)
@@ -34,8 +36,9 @@ const CaseOpenModal = ({ isOpen, onClose, reward }) => {
   }, [isOpen, reward])
 
   const handleTwitterShare = () => {
-    const tweetText = `🎉 Just opened a daily case on @ZoggyApp and won ${reward?.amount || '$0'}! 💰\n\nJoin the waitlist and start earning rewards too! 🚀\n\n#Zoggy #DailyRewards #Crypto`
-    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(window.location.origin)}`
+    const safeReferralCode = user.referralCode || 'DEFAULT_CODE'
+    const tweetText = `🎉 I just opened a chest on @Zoggy and got ${reward?.amount || '$0'}! 💰\n\nJoin the waitlist and start earning rewards too! 🚀\n\n#Zoggy #DailyRewards #Crypto`
+    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(window.location.origin)}/signup?ref=${safeReferralCode}`
     window.open(tweetUrl, '_blank', 'width=550,height=420')
   }
 
@@ -54,7 +57,7 @@ const CaseOpenModal = ({ isOpen, onClose, reward }) => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -269,7 +272,7 @@ const CaseOpenModal = ({ isOpen, onClose, reward }) => {
                       animate={{ opacity: 1 }}
                       transition={{ delay: 1 }}
                     >
-                      Amazing! You've earned <span className="text-gold font-semibold">{reward?.amount || '$0.00'}</span> from your daily chest!
+                      Congrats! You unboxed <span className="text-gold font-semibold">{reward?.amount || '$0.00'}</span>
                     </motion.p>
                   </motion.div>
                 )}

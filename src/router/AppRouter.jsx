@@ -4,7 +4,6 @@ import { useAuth } from '../contexts/AuthContext'
 
 // Pages
 import LandingPage from '../pages/LandingPage'
-import SignupPage from '../pages/SignupPage'
 import SigninPage from '../pages/SigninPage'
 import VerifyEmailPage from '../pages/VerifyEmailPage'
 import DashboardPage from '../pages/DashboardPage'
@@ -42,7 +41,6 @@ const AppRouter = () => {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<LandingPage />} />
-        <Route path="/signup" element={<SignupPage />} />
         <Route path="/signin" element={<SigninPage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
         
