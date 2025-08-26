@@ -15,7 +15,7 @@ const TelegramModal = ({ onClose }) => {
   const [telegramUserId, setTelegramUserId] = useState('')
   const [pollingAttempts, setPollingAttempts] = useState(0)
   const [timeRemaining, setTimeRemaining] = useState(0)
-  const channelHandle = import.meta.env.VITE_TG_CHANNEL_HANDLE || '@zoggycasino'
+  const channelHandle = import.meta.env.VITE_TG_CHANNEL_HANDLE || '@zoggytestchannel'
 
   // Clean up polling on unmount
   useEffect(() => {

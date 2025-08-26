@@ -7,6 +7,7 @@ import { Shield, Menu, X, Home, LogIn, LayoutDashboard, LogOut } from 'lucide-re
 import AdminLoginModal from './AdminLoginModal'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import Logo from '../assets/logo.png'
 
 const Header = ({ minimal = false, title = null }) => {
   const { user, isAuthenticated, logout } = useAuth()
@@ -71,9 +72,9 @@ const Header = ({ minimal = false, title = null }) => {
             </div> */}
             <div className="flex flex-col">
               <img 
-                src="/src/assets/logo.jpg" 
+                src={Logo} 
                 alt="Zoggy Logo" 
-                className="h-12 w-auto"
+                className="h-8 w-auto"
               />
             </div>
           </Link>
@@ -171,9 +172,9 @@ const Header = ({ minimal = false, title = null }) => {
           </div> */}
           <div className="flex flex-col">
             <img 
-              src="/src/assets/logo.jpg" 
+              src={Logo}
               alt="Zoggy Logo" 
-              className="h-12 w-auto"
+              className="h-8 w-auto"
             />
           </div>
         </Link>

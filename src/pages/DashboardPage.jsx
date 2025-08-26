@@ -23,6 +23,7 @@ const DashboardPage = () => {
   const [dashboardData, setDashboardData] = useState(null)
   const [loading, setLoading] = useState(true)
   const bannerImages = [banner0, banner1, banner2, banner3]
+  const channelHandle = import.meta.env.VITE_TG_CHANNEL_HANDLE || '@zoggytestchannel'
   
   useEffect(() => {
     // document.title = 'WAITLIST'
@@ -226,7 +227,7 @@ const DashboardPage = () => {
                 variant="primary"
                 size="lg"
                 className="w-full"
-                onClick={() => window.open('https://t.me/zoggycasino', '_blank')}
+                onClick={() => window.open(`https://t.me/${channelHandle.replace('@', '')}`, '_blank')}
                 disabled={dashboardData.telegram?.verified}
               >
                 <MessageCircle className="w-5 h-5 mr-2" />
