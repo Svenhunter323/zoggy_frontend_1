@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Twitter, Copy, Gift, Sparkles, Star, Zap } from 'lucide-react'
 import Button from './Button'
@@ -57,7 +57,7 @@ const CaseOpenModal = ({ isOpen, onClose, reward }) => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 overflow-y-auto">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -231,7 +231,7 @@ const CaseOpenModal = ({ isOpen, onClose, reward }) => {
                     }}
                   >
                     <motion.h2 
-                      className="text-3xl font-bold text-white mb-4 font-poppins"
+                      className="text-xl sm:text-3xl md:text-4xl font-bold text-white mb-4 font-poppins"
                       animate={{ 
                         scale: [1, 1.05, 1],
                         textShadow: [

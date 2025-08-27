@@ -10,7 +10,7 @@ const Carousel = ({ autoSlide = true, slideInterval = 5000, className = "" }) =>
   const [imgLoaded, setImgLoaded] = useState(false)
   const [mobilePadTop, setMobilePadTop] = useState(56) // default ~16:9 while loading
   const images = [banner0, banner1, banner2, banner3]
-
+  // slideInterval=1000000000;
   useEffect(() => {
     if (!autoSlide || images.length <= 1) return
     const interval = setInterval(
@@ -26,12 +26,12 @@ const Carousel = ({ autoSlide = true, slideInterval = 5000, className = "" }) =>
 
   const slideVariants = {
     enter: { opacity: 0, scale: 1.1, x: 60, filter: "blur(4px) brightness(1.1)" },
-    center:{ opacity: 1, scale: 1,  x: 0, filter: "blur(0px) brightness(0.6)" },
+    center:{ opacity: 1, scale: 1,  x: 0, filter: "blur(0px) brightness(1)" },
     exit:  { opacity: 0, scale: 0.95,x:-60, filter: "blur(4px) brightness(0.3)" }
   }
 
   return (
-    <div className={`relative w-full overflow-hidden ${className}`}>
+    <div className={`relative w-full overflow-hidden ${""}`}>
       {/* Aspect-ratio spacer:
           - Mobile: set by actual image ratio (padding-top % = H/W*100)
           - Desktop: keep your wide hero (pt-[32%]) */}
@@ -53,13 +53,13 @@ const Carousel = ({ autoSlide = true, slideInterval = 5000, className = "" }) =>
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ duration: 1.2, type: "spring", damping: 24, stiffness: 140 }}
+            transition={{ duration: 0.5, type: "spring", damping: 24, stiffness: 140 }}
             className="absolute inset-0 z-10"
           >
             <img
               src={images[currentIndex]}
               alt={`Banner ${currentIndex + 1}`}
-              className="w-full h-full object-contain sm:object-cover object-center block"
+              className="w-full h-full object-fill sm:object-cover object-center block"
               onLoad={(e) => {
                 setImgLoaded(true)
                 const nw = e.currentTarget.naturalWidth || 0
@@ -73,17 +73,17 @@ const Carousel = ({ autoSlide = true, slideInterval = 5000, className = "" }) =>
             />
 
             {/* Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-950/60 via-gray-900/40 to-gray-950/60 pointer-events-none" />
+            {/* <div className="absolute inset-0 bg-gradient-to-br from-gray-950/60 via-gray-900/40 to-gray-950/60 pointer-events-none" /> */}
             <div className="absolute inset-0 border-2 border-gold/30 animate-pulse pointer-events-none" />
-            <div className="absolute top-4 left-4 w-3 h-3 bg-gold rounded-full animate-ping opacity-75 pointer-events-none" />
+            {/* <div className="absolute top-4 left-4 w-3 h-3 bg-gold rounded-full animate-ping opacity-75 pointer-events-none" />
             <div className="absolute top-4 right-4 w-2 h-2 bg-yellow-400 rounded-full animate-ping opacity-60 pointer-events-none" style={{ animationDelay: '0.5s' }} />
             <div className="absolute bottom-4 left-4 w-2 h-2 bg-gold rounded-full animate-ping opacity-50 pointer-events-none" style={{ animationDelay: '1s' }} />
-            <div className="absolute bottom-4 right-4 w-3 h-3 bg-yellow-300 rounded-full animate-ping opacity-70 pointer-events-none" style={{ animationDelay: '1.5s' }} />
+            <div className="absolute bottom-4 right-4 w-3 h-3 bg-yellow-300 rounded-full animate-ping opacity-70 pointer-events-none" style={{ animationDelay: '1.5s' }} /> */}
           </motion.div>
         </AnimatePresence>
 
         {/* Dots */}
-        {images.length > 1 && (
+        {/* {images.length > 1 && (
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
             {images.map((_, i) => (
               <button
@@ -98,7 +98,7 @@ const Carousel = ({ autoSlide = true, slideInterval = 5000, className = "" }) =>
               />
             ))}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   )

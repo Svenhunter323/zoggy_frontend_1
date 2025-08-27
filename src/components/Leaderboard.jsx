@@ -92,13 +92,33 @@ const Leaderboard = () => {
   }
 
   return (
-    <section className="py-20 px-6 bg-gray-950">
+    <section className="py-10 px-6 bg-gray-950">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Referral Leaderboard
+        <div className="text-center mb-4">
+          <h2
+            className="
+              font-poppins font-bold
+              max-[320px]:text-base
+              text-lg
+              min-[380px]:text-xl
+              sm:text-4xl
+              md:text-5xl
+              lg:text-6xl
+              leading-[1.1] tracking-tight [text-wrap:balance]
+              
+            "
+          >
+            REFERRAL LEADERBOARD
           </h2>
-          <p className="text-xl text-gray-400 mb-6">
+
+          <p className="
+            text-gray-400 
+            sm:text-1xl
+            md:text-2xl
+            lg:text-4xl
+            py-4
+            "
+          >
             Top 10 referrers win cash prizes!
           </p>
           {/* <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 max-w-2xl mx-auto">
@@ -109,7 +129,7 @@ const Leaderboard = () => {
           </div> */}
         </div>
 
-        <Card>
+        <div className="w-full max-w-4xl mx-auto shadow-2xl rounded-2xl">
           <ResponsiveTable
             data={getLeaderboardData()}
             loading={loading}
@@ -183,18 +203,27 @@ const Leaderboard = () => {
                 cellClassName: 'text-right'
               }
             ]}
+            desktopTableClassName={(item, index) => {
+              const rank = index + 1
+              const isQualified = item.referrals >= 1
+              return `w-full min-w-[600px] bg-gradient-to-br from-gray-900 to-gray-950 rounded-2xl overflow-hidden border border-gray-700/50${
+                rank <= 3 ?
+                '' :
+                ''
+              } ${!isQualified ? 'opacity-60' : ''}`
+            }}
             mobileCardClassName={(item, index) => {
               const rank = index + 1
               const isQualified = item.referrals >= 1
-              return `${
+              return `w-full bg-gradient-to-br from-gray-900 to-gray-950 rounded-2xl overflow-hidden border border-gray-700/50${
                 rank <= 3 
-                  ? 'bg-gradient-to-r from-gold/10 to-yellow-600/10 border-gold/30' 
+                  ? '' 
                   : ''
               } ${!isQualified ? 'opacity-60' : ''}`
             }}
             emptyMessage="No leaderboard data available"
           />
-        </Card>
+        </div>
       </div>
     </section>
   )

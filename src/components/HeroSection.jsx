@@ -19,13 +19,13 @@ const HeroSection = ({ onJoinWaitlist }) => {
 
 
   return (
-    <section className={`${user ? 'min-h-fit' : 'min-h-screen'} bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950`}>
+    <section className={`${user ? 'min-h-fit' : 'min-h-fit'} bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950`}>
       {/* Banner Carousel Section */}
-      <div className="md:h-96 lg:h-[28rem] relative overflow-hidden">
+      <div className="relative overflow-hidden">
         <Carousel 
           autoSlide={true}
           slideInterval={6000}
-          className="w-full h-full"
+          className=""
         />
         
         {/* Overlay Text */}
@@ -54,7 +54,7 @@ const HeroSection = ({ onJoinWaitlist }) => {
       
       {/* Hero Text Content */}
       {(!user || hasReferralCode) && (
-        <div className="flex items-center justify-center px-6 py-12 min-h-[calc(100vh-24rem)]">
+        <div className="flex items-center justify-center px-6 py-6 min-h-[calc(100vh-24rem)]">
           <div className="max-w-5xl mx-auto text-center relative">
             <motion.div
               initial={{ opacity: 0, y: 30 }}

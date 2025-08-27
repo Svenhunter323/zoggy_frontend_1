@@ -93,7 +93,7 @@ const DashboardPage = () => {
       <Header minimal={false} title="" />
 
       {/* Hero Banner Carousel Section */}
-      <div className="md:h-96 lg:h-[28rem] relative overflow-hidden">
+      <div className="relative overflow-hidden">
         <Carousel
           autoSlide={true}
           slideInterval={6000}

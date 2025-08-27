@@ -186,12 +186,23 @@ const LatestWins = () => {
   }, [apiWins])
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-900">
+    <section className="py-10 px-4 sm:px-6 lg:px-8 bg-gray-900">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16 animate-fade-in-up">
-          <h2 className="text-5xl md:text-6xl font-bold text-white mb-6 font-poppins bg-gradient-to-r from-white via-gold to-white bg-clip-text text-transparent">
+        <div className="text-center mb-4 animate-fade-in-up">
+        <h2
+          className="
+            font-poppins font-bold
+            max-[320px]:text-base
+            text-lg
+            min-[380px]:text-xl
+            sm:text-4xl
+            md:text-5xl
+            lg:text-6xl
+            leading-[1.1] tracking-tight [text-wrap:balance]
+          "
+        >
           LATEST CHEST WINS
-          </h2>
+        </h2>
           {/* <p className="text-2xl text-gray-300 font-montserrat font-light">
             Real-time wins happening now!
           </p> */}
