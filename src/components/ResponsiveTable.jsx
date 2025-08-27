@@ -72,7 +72,7 @@ const ResponsiveTable = ({
   }
 
   const DesktopTable = () => (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-hidden">
       <table className={`w-full ${desktopTableClassName}`}>
         <thead>
           <tr className="border-b border-gray-700">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Download, Users, UserPlus, Eye, EyeOff } from 'lucide-react'
 import { useApi } from '../hooks/useApi'
 import { adminAPI } from '../api/endpoints'
@@ -15,7 +15,15 @@ const AdminPage = () => {
   const { showToast } = useToast()
   
   const { data: users, loading: usersLoading } = useApi(adminAPI.getUsers)
+  const { data, loading } = useApi(adminAPI.getUsers)
+  console.log("------------2----------------", data)
+  
   const { data: referrals, loading: referralsLoading } = useApi(adminAPI.getReferrals)
+  // console.log(referrals);
+
+  useEffect(() => {
+    console.log(users);
+  }, [users])
 
   const handleExportCSV = async () => {
     try {
@@ -111,7 +119,7 @@ const AdminPage = () => {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-3">
                 <Users className="w-6 h-6 text-brand" />
-                <h2 className="text-2xl font-bold text-white">Users</h2>
+                <h2 className="text-2x2 font-bold text-white">Users</h2>
               </div>
               <Button
                 variant="outline"
@@ -123,49 +131,52 @@ const AdminPage = () => {
                 Export CSV
               </Button>
             </div>
-            
-            <ResponsiveTable
-              data={users || []}
-              loading={usersLoading}
-              columns={[
-                {
-                  header: 'Email',
-                  accessor: 'email',
-                  render: (value) => (
-                    <span className="text-white font-mono text-sm break-all">
-                      {maskEmail(value)}
-                    </span>
-                  )
-                },
-                {
-                  header: 'Claim Code',
-                  accessor: 'claimCode',
-                  render: (value) => (
-                    <span className="text-gold font-mono text-sm">
-                      {value}
-                    </span>
-                  )
-                },
-                {
-                  header: 'Credits',
-                  accessor: 'credits',
-                  render: (value, item) => (
-                    <span className="text-green-400 font-semibold">
-                      {formatCurrency(((item.credits + item.cents)/100).toFixed(2) || 0)}
-                    </span>
-                  )
-                }
-              ]}
-              emptyMessage="No users found"
-            />
+              
+            { users !==null && (
+              <ResponsiveTable
+                data={users || []}
+                loading={usersLoading}
+                columns={[
+                  {
+                    header: 'Email',
+                    accessor: 'email',
+                    render: (value) => (
+                      <span className="text-white font-mono text-sm break-all">
+                        {maskEmail(value)}
+                      </span>
+                    )
+                  },
+                  {
+                    header: 'Claim Code',
+                    accessor: 'claimCode',
+                    render: (value) => (
+                      <span className="text-gold font-mono text-sm">
+                        {value}
+                      </span>
+                    )
+                  },
+                  {
+                    header: 'Credits',
+                    accessor: 'credits',
+                    render: (value, item) => (
+                      <span className="text-green-400 font-semibold">
+                        {formatCurrency(((item.credits + item.cents)/100).toFixed(2) || 0)}
+                      </span>
+                    )
+                  }
+                ]}
+                emptyMessage="No users found"
+              />
+            )}
           </Card>
 
           {/* Referrals Table */}
+          
           <Card>
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-3">
                 <UserPlus className="w-6 h-6 text-gold" />
-                <h2 className="text-2xl font-bold text-white">Referrals</h2>
+                <h2 className="text-2x2 font-bold text-white">Referrals</h2>
               </div>
               <Button
                 variant="outline"
@@ -177,50 +188,51 @@ const AdminPage = () => {
                 Export CSV
               </Button>
             </div>
-            
-            <ResponsiveTable
-              data={referrals || []}
-              loading={referralsLoading}
-              columns={[
-                {
-                  header: 'Referrer Email',
-                  accessor: 'referrerEmail',
-                  render: (value) => (
-                    <span className="text-white font-mono text-sm break-all">
-                      {maskEmail(value)}
-                    </span>
-                  )
-                },
-                {
-                  header: 'Referral Code',
-                  accessor: 'referralCode',
-                  render: (value) => (
-                    <span className="text-gold font-mono text-sm font-semibold">
-                      {value}
-                    </span>
-                  )
-                },
-                {
-                  header: 'Total Referrals',
-                  accessor: 'totalReferrals',
-                  render: (value) => (
-                    <span className="text-white text-sm font-semibold">
-                      {value}
-                    </span>
-                  )
-                },
-                {
-                  header: 'Credits Earned',
-                  accessor: 'referrerCredits',
-                  render: (value) => (
-                    <span className="text-green-400 text-sm font-semibold">
-                      ${value}
-                    </span>
-                  )
-                }
-              ]}
-              emptyMessage="No referrals found"
-            />
+            { referrals !== null && (
+              <ResponsiveTable
+                data={referrals || []}
+                loading={referralsLoading}
+                columns={[
+                  {
+                    header: 'Referrer Email',
+                    accessor: 'referrerEmail',
+                    render: (value) => (
+                      <span className="text-white font-mono text-sm break-all">
+                        {maskEmail(value)}
+                      </span>
+                    )
+                  },
+                  {
+                    header: 'Referral Code',
+                    accessor: 'referralCode',
+                    render: (value) => (
+                      <span className="text-gold font-mono text-sm font-semibold">
+                        {value}
+                      </span>
+                    )
+                  },
+                  {
+                    header: 'Total Referrals',
+                    accessor: 'totalReferrals',
+                    render: (value) => (
+                      <span className="text-white text-sm font-semibold">
+                        {value}
+                      </span>
+                    )
+                  },
+                  {
+                    header: 'Credits Earned',
+                    accessor: 'referrerCredits',
+                    render: (value) => (
+                      <span className="text-green-400 text-sm font-semibold">
+                        ${value}
+                      </span>
+                    )
+                  }
+                ]}
+                emptyMessage="No referrals found"
+              />
+            )}
           </Card>
         </div>
       </div>
