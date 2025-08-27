@@ -16,14 +16,14 @@ const AdminPage = () => {
   
   const { data: users, loading: usersLoading } = useApi(adminAPI.getUsers)
   const { data, loading } = useApi(adminAPI.getUsers)
-  console.log("------------2----------------", data)
+  // console.log("------------2----------------", data)
   
   const { data: referrals, loading: referralsLoading } = useApi(adminAPI.getReferrals)
   // console.log(referrals);
 
-  useEffect(() => {
-    console.log(users);
-  }, [users])
+  // useEffect(() => {
+  //   console.log(users);
+  // }, [users])
 
   const handleExportCSV = async () => {
     try {

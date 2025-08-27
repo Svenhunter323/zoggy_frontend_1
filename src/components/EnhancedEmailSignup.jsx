@@ -350,10 +350,10 @@ const EnhancedEmailSignup = ({ onSuccess, forceEnable = false }) => {
               value={email}
               onChange={handleEmailChange}
               className={`w-full pl-12 pr-12 py-4 bg-gray-800/50 backdrop-blur-sm border-2 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-all duration-300 text-lg ${
-                (isLoading || (!rateLimitState.allowed && !forceEnable))
+                (isLoading || !rateLimitState.allowed)
                   ? 'border-red-500 bg-red-500/5 cursor-not-allowed'
-                  : (!forceEnable)
-                  ? 'border-gray-500 bg-gray-500/5 cursor-not-allowed'
+                  : (forceEnable)
+                  ? 'border-gray-500 bg-gray-500/5 cursor-text'
                   : validationState.errors.length > 0
                   ? 'border-red-500 focus:border-red-400 focus:ring-2 focus:ring-red-400/20 cursor-text' 
                   : validationState.isValid && email.trim()

@@ -10,8 +10,8 @@ export const useApi = (apiCall, dependencies = []) => {
       setLoading(true)
       setError(null)
       const response = await apiCall(...args)
-      console.log("------------1----------------")
-      console.log(apiCall, response.data)
+      // console.log("------------1----------------")
+      // console.log(apiCall, response.data)
       setData(response.data)
       return response.data
     } catch (err) {
