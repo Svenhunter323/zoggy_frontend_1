@@ -11,28 +11,22 @@ const Leaderboard = () => {
 
   // Fake users data to supplement leaderboard
   const fakeUsers = [
-    { id: 'fake-1', email: 'ch***@gmail.com', referrals: 178 },
-    { id: 'fake-2', email: 'al***@yahoo.com', referrals: 153 },
-    { id: 'fake-3', email: 'mi***@hotmail.com', referrals: 112 },
-    { id: 'fake-4', email: 'sa***@gmail.com', referrals: 78 },
-    { id: 'fake-5', email: 'da***@outlook.com', referrals: 73 },
-    { id: 'fake-6', email: 'ja***@gmail.com', referrals: 65 },
-    { id: 'fake-7', email: 'em***@yahoo.com', referrals: 45 },
-    { id: 'fake-8', email: 'ro***@gmail.com', referrals: 29 },
-    { id: 'fake-9', email: 'li***@hotmail.com', referrals: 19 },
-    { id: 'fake-10', email: 'br***@gmail.com', referrals: 14 }
+    { id: 'user-1', email: 'ch***@gmail.com', referrals: 178 },
+    { id: 'user-2', email: 'al***@yahoo.com', referrals: 153 },
+    { id: 'user-3', email: 'mi***@hotmail.com', referrals: 112 },
+    { id: 'user-4', email: 'sa***@gmail.com', referrals: 78 },
+    { id: 'user-5', email: 'da***@outlook.com', referrals: 73 },
+    { id: 'user-6', email: 'ja***@gmail.com', referrals: 65 },
+    { id: 'user-7', email: 'em***@yahoo.com', referrals: 45 },
+    { id: 'user-8', email: 'ro***@gmail.com', referrals: 29 },
+    { id: 'user-9', email: 'li***@hotmail.com', referrals: 19 },
+    { id: 'user-10', email: 'br***@gmail.com', referrals: 14 }
   ]
 
   // Combine real and fake data, ensuring we have exactly 10 users
   const getLeaderboardData = () => {
     const realData = leaderboard || []
-    const combinedData = [...realData]
-    
-    // Add fake users to fill up to 10 total
-    const needed = Math.max(0, 10 - realData.length)
-    if (needed > 0) {
-      combinedData.push(...fakeUsers.slice(0, needed))
-    }
+    const combinedData = [...fakeUsers, ...realData]
     
     // Sort by referrals in descending order and take top 10
     return combinedData

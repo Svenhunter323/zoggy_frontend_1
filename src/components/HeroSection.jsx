@@ -54,15 +54,15 @@ const HeroSection = ({ onJoinWaitlist }) => {
       
       {/* Hero Text Content */}
       {(!user || hasReferralCode) && (
-        <div className="flex items-center justify-center px-6 py-6 min-h-[calc(100vh-24rem)]">
+        <div className="flex items-center justify-center px-6 py-6">
           <div className="max-w-5xl mx-auto text-center relative">
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               className="mb-8"
             >
-            </motion.div>
+            </motion.div> */}
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}

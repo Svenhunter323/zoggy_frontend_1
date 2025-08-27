@@ -110,7 +110,7 @@ export const dataAPI = {
   getStats: () => 
     api.get('/stats'),
   
-  getLatestWins: (limit = 24) => 
+  getLatestWins: (limit = 4) => 
     api.get(`/wins/latest?limit=${limit}`),
   
   getLeaderboard: () => 

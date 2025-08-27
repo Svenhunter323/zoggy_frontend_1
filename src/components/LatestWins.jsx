@@ -91,17 +91,27 @@ const maskEmail = (email) => {
   return `${local.substring(0, 2)}***@${domain}`
 }
 
+// util: Fisher-Yates shuffle
+const shuffleArray = (arr) => {
+  const array = [...arr]
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[array[i], array[j]] = [array[j], array[i]]
+  }
+  return array
+}
+
 const LatestWins = () => {
   const [wins, setWins] = useState([])
   // const [lastBigWin, setLastBigWin] = useState(0)
   // const [recentBigWins, setRecentBigWins] = useState([])
   
-  const { data: apiWins } = useApi(dataAPI.getLatestWins, [])
+  const { data: apiWins } = useApi(dataAPI.getLatestWins, [4])
 
   useEffect(() => {
     // Initialize with API data or fake data
 
-    let initialWins = apiWins || Array.from({ length: 8 }, generateFakeWin)
+    let initialWins = apiWins || Array.from({ length: 4 }, generateFakeWin)
 
     // console.log('initialWins', initialWins)
     
@@ -126,10 +136,13 @@ const LatestWins = () => {
       }))
     
     // If we don't have enough valid wins, generate more fake ones
-    while (initialWins.length < 8) {
+    while (initialWins.length < 24) {
       initialWins.push(generateFakeWin())
     }
-    setWins(initialWins.slice(0, 24))
+
+    // console.log("initialWins", initialWins)
+    initialWins = shuffleArray(initialWins)
+    setWins(initialWins.slice(0, 4))
 
     let nextTimeout
     let isInMicroBurst = false
@@ -173,7 +186,7 @@ const LatestWins = () => {
 
       nextTimeout = setTimeout(() => {
         const newWin = generateFakeWin()
-        setWins(prevWins => [newWin, ...prevWins.slice(0, 23)])
+        setWins(prevWins => [newWin, ...prevWins.slice(0, 4)])
         scheduleNextWin()
       }, delay)
     }
