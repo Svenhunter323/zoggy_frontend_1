@@ -4,7 +4,8 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://prelaunch-lan
 
 // Create axios instance
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  // baseURL: API_BASE_URL,
+  baseURL: '/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -89,6 +90,9 @@ export const userAPI = {
 
 // Telegram endpoints
 export const telegramAPI = {
+  login: (payload) => 
+    api.post('/telegram/login', payload),
+
   getDeeplink: () => 
     api.get('/telegram/deeplink'),
   
@@ -97,6 +101,9 @@ export const telegramAPI = {
     
   markAsVerified: (telegramUserId) => 
     api.post('/telegram/verify', { telegramUserId }),
+
+  reCheck: () =>
+    api.get('/api/telegram/recheck'),
 }
 
 // Chest endpoints

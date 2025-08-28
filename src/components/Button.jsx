@@ -17,6 +17,7 @@ const Button = ({
     secondary: 'bg-gradient-to-r from-gold to-yellow-500 hover:from-gold/90 hover:to-yellow-400 text-gray-900 shadow-lg hover:shadow-gold/50 border border-gold/50',
     outline: 'border-2 border-brand text-brand hover:bg-gradient-to-r hover:from-brand hover:to-red-700 hover:text-white hover:border-transparent',
     ghost: 'text-brand hover:bg-brand/10 hover:text-brand/80',
+    sky: 'bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-400 hover:to-sky-600 text-white shadow-lg hover:shadow-sky-500/50 border border-sky-400/50',
   }
   
   const sizes = {

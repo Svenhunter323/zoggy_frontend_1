@@ -9,10 +9,13 @@ const DAY_IN_MS = 24 * 60 * 60 * 1000
 // Get client IP address (approximation using various methods)
 export const getClientIP = async () => {
   try {
+    const res = await fetch('/api/ip', { credentials: 'include' });
+    const { ip } = await res.json();
+    return ip;
     // Try to get IP from various sources
     const responses = await Promise.allSettled([
       fetch('https://api.ipify.org?format=json'),
-      fetch('https://ipapi.co/json/'),
+      fetch(`${location.origin}/proxy/ipapi`),
       fetch('https://httpbin.org/ip')
     ])
     

@@ -86,7 +86,6 @@ const generateFakeWin = () => {
 }
 
 const maskEmail = (email) => {
-  if (false) return email
   const [local, domain] = email.split('@')
   return `${local.substring(0, 2)}***@${domain}`
 }
@@ -113,7 +112,7 @@ const LatestWins = () => {
 
     let initialWins = apiWins || Array.from({ length: 4 }, generateFakeWin)
 
-    // console.log('initialWins', initialWins)
+    console.log('initialWins', initialWins)
     
     // Validate and ensure all wins have required fields
     initialWins = initialWins

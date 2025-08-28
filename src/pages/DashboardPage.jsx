@@ -8,10 +8,10 @@ import LatestWins from '../components/LatestWins'
 import Leaderboard from '../components/Leaderboard'
 import Carousel from '../components/Carousel'
 import CaseOpenModal from '../components/CaseOpenModal'
-import TelegramModal from '../components/TelegramModal'
-import { Gift, Users, Trophy, MessageCircle } from 'lucide-react'
-import { motion } from 'framer-motion'
-import Button from '../components/Button'
+// import TelegramModal from '../components/TelegramModal'
+import { Gift, Users, Trophy } from 'lucide-react'
+// import { motion } from 'framer-motion'
+// import Button from '../components/Button'
 import { userAPI } from '../api/endpoints'
 import { useToast } from '../contexts/ToastContext'
 
@@ -21,27 +21,18 @@ const DashboardPage = () => {
   const [dashboardData, setDashboardData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [showCaseModal, setShowCaseModal] = useState(false)
-  const [showTelegramModal, setShowTelegramModal] = useState(false)
+  // const [showTelegramModal, setShowTelegramModal] = useState(false)
   const [reward, setReward] = useState(null)
-  const channelHandle = import.meta.env.VITE_TG_CHANNEL_HANDLE || '@zoggytestchannel'
 
   const handleOpenChest = (rewardData) => {
     setReward(rewardData)
     setShowCaseModal(true)
   }
 
-  const handleShowTelegramModal = () => {
-    setShowTelegramModal(true)
-  }
-
   const handleCloseCaseModal = async () => {
     setShowCaseModal(false)
     setReward(null)
     await fetchUser() // Refresh user data
-  }
-
-  const handleCloseTelegramModal = () => {
-    setShowTelegramModal(false)
   }
 
   useEffect(() => {
@@ -215,18 +206,17 @@ const DashboardPage = () => {
             </h2> */}
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
+          {/* <div className="grid lg:grid-cols-1 gap-8"> */}
             {/* Left: Big Chest */}
             <Card className="text-center">
               <DailyChest
                 dashboardData={dashboardData}
                 onOpenChest={handleOpenChest}
-                onShowTelegramModal={handleShowTelegramModal}
               />
             </Card>
 
             {/* Right: Telegram Requirement */}
-            <Card>
+            {/* <Card>
               <div className="text-center mb-6">
                 <div className="w-20 h-20 bg-gradient-to-br from-brand to-red-700 rounded-full flex items-center justify-center mx-auto mb-6">
                   <MessageCircle className="w-10 h-10 text-white" />
@@ -256,8 +246,8 @@ const DashboardPage = () => {
                 <MessageCircle className="w-5 h-5 mr-2" />
                 {dashboardData.telegram?.verified ? 'Telegram Connected' : dashboardData.telegram?.linked ? 'Complete Verification' : 'Join Telegram Group'}
               </Button>
-            </Card>
-          </div>
+            </Card> */}
+          {/* </div> */}
         </div>
 
         {/* Live Wins */}
@@ -274,11 +264,11 @@ const DashboardPage = () => {
         reward={reward}
       />
 
-      {showTelegramModal && (
+      {/* {showTelegramModal && (
         <TelegramModal
           onClose={handleCloseTelegramModal}
         />
-      )}
+      )} */}
 
       {/* <ToastContainer /> */}
     </div>
