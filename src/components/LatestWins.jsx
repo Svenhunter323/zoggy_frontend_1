@@ -112,7 +112,7 @@ const LatestWins = () => {
 
     let initialWins = apiWins || Array.from({ length: 4 }, generateFakeWin)
 
-    console.log('initialWins', initialWins)
+    // console.log('initialWins', initialWins)
     
     // Validate and ensure all wins have required fields
     initialWins = initialWins

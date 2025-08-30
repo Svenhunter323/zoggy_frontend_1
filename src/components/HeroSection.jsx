@@ -71,7 +71,7 @@ const HeroSection = ({ onJoinWaitlist }) => {
             >
             <EnhancedEmailSignup 
               onSuccess={(data) => {
-                console.log('Signup successful:', data)
+                // console.log('Signup successful:', data)
                 // User will be automatically redirected to dashboard
               }}
               forceEnable={hasReferralCode}

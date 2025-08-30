@@ -3,14 +3,16 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // set via env when ngrok rotates
-const NGROK_HOST = '38173443f296.ngrok-free.app'; // frontend
+// const NGROK_HOST = '38173443f296.ngrok-free.app'; // frontend
+const NGROK_HOST = 'zoggybet.com'; // frontend
 // const NGROK_HOST = '56b68f8b0cd2.ngrok-free.app'; // backend
 // change if your backend runs elsewhere in dev
 // const BACKEND = 'http://localhost:8080';
-const BACKEND = 'http://localhost:8080';
+const BACKEND = 'https://zoggybet.com';
 
 export default defineConfig({
   plugins: [react()],
+
   server: {
     host: true,
     port: 8000,
@@ -24,6 +26,7 @@ export default defineConfig({
       host: NGROK_HOST,
       protocol: 'wss',
       clientPort: 443,
+      overlay: false,
     },
 
     // absolute asset URLs/HMR point to your public dev origin

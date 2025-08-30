@@ -264,13 +264,18 @@ const EnhancedEmailSignup = ({ onSuccess, forceEnable = false }) => {
       } else if (error.response?.status === 429) {
         // Rate limited
         showToast('Too many signup attempts. Please try again later.', 'error')
+        // setRateLimitState({
+        //   allowed: false,
+        //   message: 'Rate limit exceeded. Please try again later.',
+        //   resetTime: new Date(Date.now() + 60 * 60 * 1000) // 1 hour
+        // })
         setRateLimitState({
           allowed: false,
-          message: 'Rate limit exceeded. Please try again later.',
-          resetTime: new Date(Date.now() + 60 * 60 * 1000) // 1 hour
+          message: 'Accounts limit exceeded. Please log in your account.',
+          resetTime: null
         })
       } else if (error.response?.status === 400) {
-        const errorMessage = error.response.data?.message || 'Invalid email format'
+        const errorMessage = error.response.data?.message || 'Invalid email format or Not allowed device'
         showToast(errorMessage, 'error')
       } else {
         showToast('Something went wrong. Please try again.', 'error')

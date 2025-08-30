@@ -7,6 +7,8 @@ import LatestWins from '../components/LatestWins'
 import Leaderboard from '../components/Leaderboard'
 import Footer from '../components/Footer'
 
+// To test Animation
+
 const LandingPage = () => {
   const navigate = useNavigate()
 
@@ -23,6 +25,10 @@ const LandingPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       <Header minimal={false} title="" />
       <HeroSection onJoinWaitlist={handleJoinWaitlist} />
+
+
+      
+      
       {/* <StatsSection /> */}
       <LatestWins />
       <Leaderboard />

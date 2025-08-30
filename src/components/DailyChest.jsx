@@ -70,6 +70,26 @@ const DailyChest = ({ dashboardData, onOpenChest }) => {
     }
   }
 
+  const handleJoinTelegram = async () => {
+    try {
+      const res = await telegramAPI.nonce();
+      if(!res.data.ok) {
+        // console.log("server failed------------");
+        return;
+      }
+      const { nonce, botUsername } = res.data;
+
+      // console.log(`nonce: ${nonce}, botUsername: ${botUsername}`);
+      const tg = 'tg://resolve?domain=' + botUsername + '&start=auth_' + encodeURIComponent(nonce);
+      const web = 'https://t.me/' + botUsername + '?start=auth_' + encodeURIComponent(nonce);
+      location.href = tg; 
+      
+      // setTimeout(() => location.href = web, 10000);
+    } catch (e) {
+      console.log("Festch nonce error", e);
+    }
+  }
+
   const handleOpenChest = async () => {
     if (!verified) {
       return
@@ -156,11 +176,9 @@ const DailyChest = ({ dashboardData, onOpenChest }) => {
             </motion.div>
           </div>
 
-          <h3 className="text-3xl font-bold text-white mb-8 font-poppins">Solana Case</h3>
+          <h3 className="text-3xl font-bold text-white mb-8 font-poppins">Open your Daily Chest!</h3>
           
-          {!(dashboardData?.telegram?.linked || tgState.ok) ? (
-            <TelegramLoginButton onAuth={handleAuth}/>
-          ) : ( (dashboardData.telegram.verified || verified) ? 
+          {( (dashboardData.telegram.verified || verified) ? 
             canOpen ? (
               <Button
                 variant="primary"
@@ -195,13 +213,11 @@ const DailyChest = ({ dashboardData, onOpenChest }) => {
                   variant="sky"
                   size="lg"
                   className="w-full"
-                  onClick={() =>
-                    window.open(joinHref, '_blank')
-                  }
+                  onClick={handleJoinTelegram}
                   disabled={dashboardData?.telegram?.verified}
                 >
                   <FaTelegramPlane className="w-5 h-5 mr-2" />
-                    Join Zoggy
+                    Join Telegram
                 </Button>
               </div>
             )
@@ -222,7 +238,7 @@ const DailyChest = ({ dashboardData, onOpenChest }) => {
               </div>
 
               <p className="text-lg text-gray-300 font-montserrat leading-relaxed">
-                You must connect Telegram and join our group to be eligible to open a daily case and earn rewards.
+                You must connect Telegram and join our group to be able to open a daily chest and earn rewards up to $10.000.
               </p>
 
               {(dashboardData?.telegram?.linked || tgState.ok) && (

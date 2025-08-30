@@ -103,7 +103,13 @@ export const telegramAPI = {
     api.post('/telegram/verify', { telegramUserId }),
 
   reCheck: () =>
-    api.get('/api/telegram/recheck'),
+    api.get('/telegram/recheck'),
+
+  nonce: () =>
+    api.post('/telegram/nonce'),
+
+  callback: (params) =>
+    api.get('/telegram/callback', { params })
 }
 
 // Chest endpoints

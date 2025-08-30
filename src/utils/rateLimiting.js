@@ -63,7 +63,8 @@ export const checkIPRateLimit = async () => {
         allowed: false,
         remaining: 0,
         resetTime: new Date(now + timeUntilReset),
-        message: `Too many signup attempts from this IP. Please try again in ${Math.ceil(timeUntilReset / (60 * 1000))} minutes.`
+        message: `Too many signup attempts from this IP. Please log in your account.`
+        // message: `Too many signup attempts from this IP. Please try again in ${Math.ceil(timeUntilReset / (60 * 1000))} minutes.`
       }
     }
     
@@ -133,7 +134,8 @@ export const checkDeviceRateLimit = () => {
         allowed: false,
         remaining: 0,
         resetTime: new Date(now + timeUntilReset),
-        message: `Too many signup attempts. Please try again in ${Math.ceil(timeUntilReset / (60 * 1000))} minutes.`
+        // message: `Too many signup attempts. Please try again in ${Math.ceil(timeUntilReset / (60 * 1000))} minutes.`
+        message: `Too many signup attempts. Please log in your account.`
       }
     }
     

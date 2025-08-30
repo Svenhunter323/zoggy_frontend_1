@@ -37,8 +37,8 @@ const CaseOpenModal = ({ isOpen, onClose, reward }) => {
 
   const handleTwitterShare = () => {
     const safeReferralCode = user.referralCode || 'DEFAULT_CODE'
-    const tweetText = `🎉 I just opened a chest on @Zoggy and got ${reward?.amount || '$0'}! 💰\n\nJoin the waitlist and start earning rewards too! 🚀\n\n#Zoggy #DailyRewards #Crypto`
-    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(window.location.origin)}/signup?ref=${safeReferralCode}`
+    const tweetText = `🎉 I just opened a daily chest on @Zoggycasino and got ${reward?.amount || '$0'}!💸\n\nJoin the waitlist and win up to $10.000 daily prizes 👇\n\n`
+    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(window.location.origin)}?ref=${safeReferralCode}`
     window.open(tweetUrl, '_blank', 'width=550,height=420')
   }
 
