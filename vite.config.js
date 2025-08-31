@@ -8,7 +8,7 @@ const NGROK_HOST = 'zoggybet.com'; // frontend
 // const NGROK_HOST = '56b68f8b0cd2.ngrok-free.app'; // backend
 // change if your backend runs elsewhere in dev
 // const BACKEND = 'http://localhost:8080';
-const BACKEND = 'https://zoggybet.com';
+const BACKEND = 'https://api.zoggybet.com';
 
 export default defineConfig({
   plugins: [react()],
